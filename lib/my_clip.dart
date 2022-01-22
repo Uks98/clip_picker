@@ -202,7 +202,7 @@ class _MyClipState extends State<MyClip> {
                 ),
               );
             } else if (index == 1) {
-              return Container(height: 900, child: getStudy());
+              return Container(child: getStudy());
             } else if (index == 2) {
               return SizedBox(
                 height: 20,
@@ -221,10 +221,12 @@ class _MyClipState extends State<MyClip> {
           child: Text("오늘의 공부를 기록해주세요",
               style: TextStyle(color: Colors.white, fontSize: 18)));
     }
-    return Scrollbar(
+    return Center(
       child: Container(
-        height: 900,
+        height: MediaQuery.of(context).size.height+900,
         child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          physics: ScrollPhysics(),
             itemCount: picks.length,
             itemBuilder: (ctx, idx) {
               return InkWell(
@@ -275,8 +277,10 @@ class _MyClipState extends State<MyClip> {
                           );
                         });
                   },
-                  child: StudyCard(
-                    pick: picks[idx],
+                  child: Container(
+                    child: StudyCard(
+                      pick: picks[idx],
+                    ),
                   ));
             }),
       ),

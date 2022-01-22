@@ -517,7 +517,7 @@ class StudyCard extends StatelessWidget {
       0,
       _t.length - 2,
     );
-    TimeOfDay times = TimeOfDay(hour: int.parse(_h), minute: int.parse(_m));
+    TimeOfDay _times = TimeOfDay(hour: int.parse(_h), minute: int.parse(_m));
 
     String _ts = pick.studyTime.toString();
     String _ms = _ts.substring(
@@ -527,13 +527,10 @@ class StudyCard extends StatelessWidget {
       0,
       _ts.length - 2,
     );
-    TimeOfDay timesa = TimeOfDay(hour: int.parse(_hs), minute: int.parse(_ms));
+    TimeOfDay _timesa = TimeOfDay(hour: int.parse(_hs), minute: int.parse(_ms));
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-      SizedBox(
-        height: 20,
-      ),
       Stack(
         children: [
           Center(
@@ -556,23 +553,26 @@ class StudyCard extends StatelessWidget {
                                 fontSize: 18,
                                 letterSpacing: 0.3),
                           )
-                        : Text(
-                            "${pick.name}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3),
-                          ),
+                        : Container(
+                          child: Text(
+                              "${pick.name}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.3),
+                            ),
+                      width: 200,
+                        ),
                     SizedBox(
                       height: 10,
                     ),
                     Row(
                       children: [
                         Text(
-                          "${times.hour > 11 ? "오후 " : "오전 "}"
-                          "${Utils.makeTwoDigit(times.hour % 12)}"
-                          ":${Utils.makeTwoDigit(times.minute)}분",
+                          "${_times.hour > 11 ? "오후 " : "오전 "}"
+                          "${Utils.makeTwoDigit(_times.hour % 12)}"
+                          ":${Utils.makeTwoDigit(_times.minute)}분",
                           style: TextStyle(color: Colors.white, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -581,8 +581,8 @@ class StudyCard extends StatelessWidget {
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                         Text(
-                          "${Utils.makeTwoDigit(timesa.hour % 12)}시간"
-                          ":${Utils.makeTwoDigit(timesa.minute)}분",
+                          "${Utils.makeTwoDigit(_timesa.hour % 12)}시간"
+                          ":${Utils.makeTwoDigit(_timesa.minute)}분",
                           style: TextStyle(color: Colors.white, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -637,12 +637,14 @@ class StudyCard extends StatelessWidget {
                     pick.memo.isEmpty
                         ? Container()
                         : Container(
+                      width: 200,
                             child: Text(
                               pick.memo.toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 17,
                                   letterSpacing: 0.3),
+                              maxLines: 10,
                             ),
                           ),
                     SizedBox(
@@ -657,8 +659,8 @@ class StudyCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                               child: AssetThumb(
                                 asset: Asset(pick.image, "noimg.png", 0, 0),
-                                width: 150,
-                                height: 150,
+                                width: 160,
+                                height: 160,
                               ),
                             )),
                     SizedBox(
