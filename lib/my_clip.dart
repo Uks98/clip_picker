@@ -86,14 +86,15 @@ class _MyClipState extends State<MyClip> {
                                         date: Utils.getFormatTime(dateTime),
                                         name: "",
                                         memo: "",
-                                        time: 1130,
-                                        studyTime: 360,
+                                        time: 0110,
+                                        studyTime: 1100,
                                         studyType: 0,
                                         hardStudy: 0,
                                         image: "",
                                         color: 0,
                                       ),
                                     )));
+                            getHistories();
                           },
                           child: Text(
                             "공부 추가",
@@ -181,11 +182,11 @@ class _MyClipState extends State<MyClip> {
                         )),
                   ),
                   onDaySelected: (date, events, holidays) {
+                      getHistories();
                     dateTime = date;
-                    getHistories();
                   },
-                  initialCalendarFormat: CalendarFormat.week,
-                  availableCalendarFormats: {CalendarFormat.week: ""},
+                  initialCalendarFormat: CalendarFormat.twoWeeks,
+                  availableCalendarFormats: {CalendarFormat.twoWeeks: ""},
                   headerStyle: HeaderStyle(
                     centerHeaderTitle: true,
                     titleTextStyle: TextStyle(
@@ -202,11 +203,10 @@ class _MyClipState extends State<MyClip> {
                 ),
               );
             } else if (index == 1) {
+              getHistories();
               return Container(child: getStudy());
             } else if (index == 2) {
-              return SizedBox(
-                height: 20,
-              );
+              return Container();
             }
             return Container();
           }),
@@ -221,69 +221,75 @@ class _MyClipState extends State<MyClip> {
           child: Text("오늘의 공부를 기록해주세요",
               style: TextStyle(color: Colors.white, fontSize: 18)));
     }
-    return Center(
-      child: Container(
-        height: MediaQuery.of(context).size.height+900,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          physics: ScrollPhysics(),
-            itemCount: picks.length,
-            itemBuilder: (ctx, idx) {
-              return InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            height: 100,
-                            child: Column(
-                              children: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (ctx) => ShowDetail(
-                                          index:idx,
-                                          picks: Pick(
-                                            date: Utils.getFormatTime(dateTime),
-                                            name: picks[idx].name,
-                                            memo: picks[idx].memo,
-                                            time: picks[idx].time,
-                                            studyTime: picks[idx].studyTime,
-                                            studyType: picks[idx].studyType,
-                                            hardStudy: picks[idx].hardStudy,
-                                            image: picks[idx].image,
-                                            color: 0,
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0,top: 20),
+      child:  Container(
+          height: 450,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: ScrollPhysics(),
+              itemCount: picks.length,
+              itemBuilder: (ctx, idx) {
+                return InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              height: 100,
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (ctx) => ShowDetail(
+                                            index:idx,
+                                            picks: Pick(
+                                              date: Utils.getFormatTime(dateTime),
+                                              name: picks[idx].name,
+                                              memo: picks[idx].memo,
+                                              time: picks[idx].time,
+                                              studyTime: picks[idx].studyTime,
+                                              studyType: picks[idx].studyType,
+                                              hardStudy: picks[idx].hardStudy,
+                                              image: picks[idx].image,
+                                              color: 0,
+                                            ),
                                           ),
-                                        ),
-                                      ));
+                                        ));
+                                      },
+                                      child: Text(
+                                        "공부기록 상세보기",
+                                        style: TextStyle(
+                                            color: Palette.backgroundColor),
+                                      )),
+                                  TextButton(
+                                    onPressed: () async{
+                                      getDelete(picks[idx].id);
+                                      getHistories();
+                                      setState(() {});
+                                      Navigator.of(context).pop();
                                     },
-                                    child: Text(
-                                      "공부기록 상세보기",
-                                      style: TextStyle(
-                                          color: Palette.backgroundColor),
-                                    )),
-                                TextButton(
-                                  onPressed: () async{
-                                    getDelete(picks[idx].id);
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("삭제하기",
-                                      style: TextStyle(
-                                          color: Palette.backgroundColor)),
-                                )
-                              ],
-                            ),
-                          );
-                        });
-                  },
-                  child: Container(
-                    child: StudyCard(
-                      pick: picks[idx],
-                    ),
-                  ));
-            }),
-      ),
+                                    child: Text("삭제하기",
+                                        style: TextStyle(
+                                            color: Palette.backgroundColor)),
+                                  )
+                                ],
+                              ),
+                            );
+                          });
+                    },
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: StudyCard(
+                          pick: picks[idx],
+                        ),
+                      ),
+                    ));
+              }),
+        ),
+
     );
   }
 }

@@ -59,7 +59,7 @@ class ShowDetail extends StatelessWidget {
                 );
               } else if (index == 2) {
                 return Container(
-                  margin: EdgeInsets.only(left: 25, top: 10),
+                  margin: EdgeInsets.only(left: 25, top: 10,right: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -70,7 +70,7 @@ class ShowDetail extends StatelessWidget {
                       ):Text(
                         picks.name,
                         style: TextStyle(
-                            fontSize: 30, color: Palette.textColor),
+                            fontSize: 20, color: Palette.textColor),
                       ),
                     ],
                   ),
@@ -97,7 +97,7 @@ class ShowDetail extends StatelessWidget {
                 );
                 TimeOfDay _timesa = TimeOfDay(hour: int.parse(_hs), minute: int.parse(_ms));
                 return Container(
-                  margin: EdgeInsets.only(left: 25,top: 15),
+                  margin: EdgeInsets.only(left: 25,top: 15,),
                   child: Row(
                     children: [
                       Text(
@@ -125,7 +125,7 @@ class ShowDetail extends StatelessWidget {
                 );
               }else if(index == 4){
                 return Container(
-                  margin: EdgeInsets.only(left: 25,top: 20),
+                  margin: EdgeInsets.only(left: 25,top: 20,right: 20),
                   child: Text(picks.memo,
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ));
@@ -172,6 +172,8 @@ class ShowDetail extends StatelessWidget {
                     ],
                   ),
                 );
+              }else if(index == 6){
+                return SizedBox(height: 30,);
               }
               return Container();
             }),

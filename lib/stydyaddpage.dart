@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:clip_picker/data/database.dart';
 import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/utils.dart';
 import 'package:clip_picker/style/color_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'data/pick_class.dart';
 
@@ -17,17 +20,19 @@ class StudyAddPage extends StatefulWidget {
 }
 
 class _StudyAddPageState extends State<StudyAddPage> {
+
+  DateTime dateTime = DateTime.now();
   Pick get pick => widget.pick;
   TextEditingController titleController = TextEditingController();
   TextEditingController memoController = TextEditingController();
   TextEditingController studyTimeController = TextEditingController();
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     titleController.text = pick.name;
     memoController.text = pick.memo;
+    studyTimeController.text = pick.studyTime.toString();
   }
 
   @override
@@ -45,6 +50,12 @@ class _StudyAddPageState extends State<StudyAddPage> {
                   final db = DatabaseHelper.instance;
                   pick.name = titleController.text;
                   pick.memo = memoController.text;
+                  pick.studyTime = int.parse(studyTimeController.text) ?? 0;
+                  if (studyTimeController.text.isEmpty) {
+                    pick.studyTime = 0;
+                  }else {
+                    pick.studyTime= int.parse(studyTimeController.text) ?? 0;
+                  }
                   await db.insertPick(pick);
                   Navigator.of(context).pop();
                 },
@@ -93,59 +104,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                     ),
                   );
                 } else if (idx == 1) {
-                  String _t = pick.time.toString();
-                  String _m = _t.substring(
-                    _t.length - 2,
-                  ); //뒤에 분 가져오자
-                  String _h = _t.substring(
-                    0,
-                    _t.length - 2,
-                  );
-                  TimeOfDay time =
-                      TimeOfDay(hour: int.parse(_h), minute: int.parse(_m));
-                  return Container(
-                    margin: const EdgeInsets.only(left: 13),
-                    height: 80,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "공부 시작 시간",
-                          style: TextStyle(
-                              fontSize: 15, color: Palette.textColor1),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        InkWell(
-                            onTap: () async {
-                              TimeOfDay _time = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now());
-                              setState(() {
-                                pick.time = int.parse(
-                                    "${(_time.hour)}${Utils.makeTwoDigit(_time.minute)}");
-                                //시간 구분하기 위해서 #시간과 분 따로 구분
-                              });
-                              if (_time == null) {
-                                return;
-                              }
-                            },
-                            child: Text(
-                              "${time.hour > 11 ? "오후" : "오전"}"
-                              " ${Utils.makeTwoDigit(time.hour % 12)}:"
-                              "${Utils.makeTwoDigit(time.minute)} 분",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Palette.textColor),
-                            )),
-                      ],
-                    ),
-                  );
+
                 } else if (idx == 2) {
                   String _ts = pick.studyTime.toString();
                   String _ms = _ts.substring(
@@ -155,8 +114,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                     0,
                     _ts.length - 2,
                   );
-                  TimeOfDay times =
-                      TimeOfDay(hour: int.parse(_h), minute: int.parse(_ms));
+                  DateTime times = DateTime.now();
                   return Container(
                     margin: EdgeInsets.only(left: 12),
                     child: Column(
@@ -171,30 +129,23 @@ class _StudyAddPageState extends State<StudyAddPage> {
                             SizedBox(
                               height: 10,
                             ),
-                            InkWell(
-                                onTap: () async {
-                                  TimeOfDay _time = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now());
-                                  setState(() {
-                                    pick.studyTime = int.parse(
-                                        "${(_time.hour)}${Utils.makeTwoDigit(_time.minute)}");
-                                    //시간 구분하기 위해서 #시간과 분 따로 구분
-                                  });
-                                  if (_time == null) {
-                                    return;
-                                  }
-                                },
-                                child: Text(
-                                  " ${Utils.makeTwoDigit(times.hour % 12)}:"
-                                  "${Utils.makeTwoDigit(times.minute)} 분",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Palette.textColor),
-                                )),
+                            Container(
+                              child: TextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                controller: studyTimeController,
+                                textAlign: TextAlign.end,
+                                decoration: InputDecoration(
+                                    border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 0.5),
+                                        borderRadius: BorderRadius.circular(8))),
+                              ),
+                              width: 70,
+                            ),
                             SizedBox(
-                              height: 23,
+                              height: 20,
                             ),
                           ],
                         )
@@ -528,76 +479,94 @@ class StudyCard extends StatelessWidget {
       _ts.length - 2,
     );
     TimeOfDay _timesa = TimeOfDay(hour: int.parse(_hs), minute: int.parse(_ms));
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-      Stack(
-        children: [
-          Center(
-              child: Container(
-                  child: Container(
-            margin: EdgeInsets.all(10),
-            child: Card(
-              color: colorBox[pick.color],
-              elevation: 1,
-              child: Container(
-                margin: const EdgeInsets.only(left: 25, top: 17, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    pick.name.isEmpty
-                        ? Text(
-                            "무제",
+    return Stack(
+      children: [
+        Center(
+            child: Container(
+                child: Container(
+          margin: EdgeInsets.all(10),
+          child: Card(
+            color: colorBox[pick.color],
+            elevation: 1,
+            child: Container(
+              margin: const EdgeInsets.only(left: 25, top: 17, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  pick.name.isEmpty
+                      ? Text(
+                          "무제",
+                          style: TextStyle(
+                              color: Palette.textColor,
+                              fontSize: 18,
+                              letterSpacing: 0.3),
+                        )
+                      : Container(
+                        child: Text(
+                            "${pick.name}",
                             style: TextStyle(
-                                color: Palette.textColor,
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3),
+                          ),
+                    width: 200,
+                      ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "${_times.hour > 11 ? "오후 " : "오전 "}"
+                        "${Utils.makeTwoDigit(_times.hour % 12)}"
+                        ":${Utils.makeTwoDigit(_times.minute)}분",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        " / ",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      Text(
+                        "${pick.date}"
+                       //"${Utils.makeTwoDigit(_timesa.hour % 12)}시간"
+                       //":${Utils.makeTwoDigit(_timesa.minute)}분",
+                       //style: TextStyle(color: Colors.white, fontSize: 16),
+                       //textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Text(
+                            studyType[pick.studyType],
+                            style: TextStyle(
+                                color: Colors.black,
                                 fontSize: 18,
                                 letterSpacing: 0.3),
-                          )
-                        : Container(
-                          child: Text(
-                              "${pick.name}",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.3),
-                            ),
-                      width: 200,
+                          ),
                         ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "${_times.hour > 11 ? "오후 " : "오전 "}"
-                          "${Utils.makeTwoDigit(_times.hour % 12)}"
-                          ":${Utils.makeTwoDigit(_times.minute)}분",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          " / ",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        Text(
-                          "${Utils.makeTwoDigit(_timesa.hour % 12)}시간"
-                          ":${Utils.makeTwoDigit(_timesa.minute)}분",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(4)),
+                        margin: EdgeInsets.all(2),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        child: Container(
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: Text(
-                              studyType[pick.studyType],
+                              studyHard[pick.hardStudy],
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
@@ -605,74 +574,53 @@ class StudyCard extends StatelessWidget {
                             ),
                           ),
                           decoration: BoxDecoration(
-                              color: Colors.grey[300],
+                              color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(4)),
-                          margin: EdgeInsets.all(2),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Text(
-                                studyHard[pick.hardStudy],
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    letterSpacing: 0.3),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(4)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  pick.memo.isEmpty
+                      ? Container()
+                      : Container(
+                    width: 200,
+                          child: Text(
+                            pick.memo.toString(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                letterSpacing: 0.3),
+                            maxLines: 10,
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    pick.memo.isEmpty
-                        ? Container()
-                        : Container(
-                      width: 200,
-                            child: Text(
-                              pick.memo.toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  letterSpacing: 0.3),
-                              maxLines: 10,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  pick.image.isEmpty
+                      ? Container()
+                      : Container(
+                          width: 160,
+                          height: 160,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: AssetThumb(
+                              asset: Asset(pick.image, "noimg.png", 0, 0),
+                              width: 160,
+                              height: 160,
                             ),
-                          ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    pick.image.isEmpty
-                        ? Container()
-                        : Container(
-                            width: 160,
-                            height: 160,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: AssetThumb(
-                                asset: Asset(pick.image, "noimg.png", 0, 0),
-                                width: 160,
-                                height: 160,
-                              ),
-                            )),
-                    SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                ),
+                          )),
+                  SizedBox(
+                    height: 15,
+                  ),
+                ],
               ),
             ),
-          )))
-        ],
-      ),
-    ]);
+          ),
+        )))
+      ],
+    );
   }
 }

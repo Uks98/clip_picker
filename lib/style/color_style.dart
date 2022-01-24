@@ -7,7 +7,7 @@ class Palette{
   static const calendarPickColor2 = Color(0xff9bb1ff);
   static const floatingColor = Color(0xff748cab);
   static const textColor = Color(0xffdcdcdd);
-  static const textColor1 = Color(0xffc5c3c6);
+  static const textColor1 = Color(0xffffffff);
   static const onpressButton = Color(0xff403d39);
   static const cardColor = Color(0xff5c677d);
 }
