@@ -5,7 +5,7 @@ class Palette{
   static const backgroundColor = Color(0xff3a3a3c);
   static const calendarPickColor = Color(0xff5465ff);
   static const calendarPickColor2 = Color(0xff9bb1ff);
-  static const floatingColor = Color(0xff748cab);
+  static const floatingColor = Color(0xffb08968);
   static const textColor = Color(0xffdcdcdd);
   static const textColor1 = Color(0xffffffff);
   static const onpressButton = Color(0xff403d39);
@@ -21,4 +21,5 @@ class Palette{
   static const listPick4 = Color(0xff9c6644);
   static const listPick5 = Color(0xff74c69d);
   static const listPick6 = Color(0xff84a98c);
+  static const listPick7 = Color(0xff495057);
 }

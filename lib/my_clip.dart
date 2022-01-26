@@ -47,8 +47,7 @@ class _MyClipState extends State<MyClip> {
 
   void getAllStudy() async {
     allPicks = await dbHelper.queryAllPick();
-    setState(() {
-    });
+    setState(() {});
   }
 
   void getDelete(int id) async {
@@ -67,88 +66,107 @@ class _MyClipState extends State<MyClip> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: getPage(),
-      bottomNavigationBar: BottomNavigationBar(
+        body: getPage(),
+        bottomNavigationBar: BottomNavigationBar(
+          iconSize: 30,
+          unselectedFontSize: 0,
+          selectedFontSize: 0,
+          backgroundColor: Palette.backgroundColor,
+          currentIndex: currentIndex,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: Palette.textColor,
+                ),
+                label: "기록"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.bar_chart, color: Palette.textColor1),
+                label: "전체보기"),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: Palette.textColor,
+                ),
+                label: "통계"),
+          ],
+          onTap: (idx) {
+            setState(() {
+              currentIndex = idx;
+            });
+            if (currentIndex == 0) {
+              return getAllStudy();
+            } else {
+              print(allPicks.length);
+              return getAllStudy();
+            }
+          },
+          selectedLabelStyle:
+              TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+          selectedItemColor: Palette.textColor,
+          unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+           unselectedItemColor: Colors.grey[600],
+        ),
         backgroundColor: Palette.backgroundColor,
-        currentIndex: currentIndex,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.calendar_today,
-                color: Palette.textColor,
-              ),
-              label: "기록"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart, color: Palette.textColor1),
-              label: "통계")
-        ],
-        onTap: (idx) {
-          setState(() {
-            currentIndex = idx;
-          });
-          if (currentIndex == 0) {
-            return getAllStudy();
-          } else {
-            print(allPicks.length);
-            return getAllStudy();
-          }
-        },
-        selectedLabelStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-        selectedItemColor: Palette.textColor,
-      ),
-      backgroundColor: Palette.backgroundColor,
-      floatingActionButton: [0].contains(currentIndex)?FloatingActionButton(
-        backgroundColor: Palette.floatingColor,
-        child: Icon(Icons.add),
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  height: 100,
-                  child: Column(
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) => StudyAddPage(
-                                      pick: Pick(
-                                        date: Utils.getFormatTime(dateTime),
-                                        name: "",
-                                        memo: "",
-                                        time: 0110,
-                                        studyTime: 0,
-                                        studyType: 0,
-                                        hardStudy: 0,
-                                        image: "",
-                                        color: 0,
-                                      ),
-                                    )));
-                            getHistories();
-                          },
-                          child: Text(
-                            "공부 추가",
-                            style: TextStyle(color: Palette.backgroundColor),
-                          )),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text("설정",
-                            style: TextStyle(color: Palette.backgroundColor)),
-                      )
-                    ],
-                  ),
-                );
-              });
-        },
-      ):Container()
-    );
+
+        floatingActionButton: [0].contains(currentIndex)
+            ? FloatingActionButton(
+                backgroundColor: Palette.floatingColor,
+                child: Icon(Icons.add),
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          height: 100,
+                          child: Column(
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (ctx) => StudyAddPage(
+                                                  pick: Pick(
+                                                    date: Utils.getFormatTime(
+                                                        dateTime),
+                                                    name: "",
+                                                    memo: "",
+                                                    time: 0110,
+                                                    studyTime: 0,
+                                                    studyType: 0,
+                                                    hardStudy: 0,
+                                                    image: "",
+                                                    color: 0,
+                                                  ),
+                                                )));
+                                    getHistories();
+                                  },
+                                  child: Text(
+                                    "공부 추가",
+                                    style: TextStyle(
+                                        color: Palette.backgroundColor),
+                                  )),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text("설정",
+                                    style: TextStyle(
+                                        color: Palette.backgroundColor)),
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                },
+              )
+            : Container());
   }
 
   Widget getPage() {
     if (currentIndex == 0) {
       return getRecordStudy();
     } else if (currentIndex == 1) {
+      return getAllHistories();
+    } else if (currentIndex == 2) {
       return getAllStudyPicker();
     }
   }
@@ -261,10 +279,21 @@ class _MyClipState extends State<MyClip> {
   Widget getStudy() {
     if (picks.isEmpty) {
       return Container(
-          margin: const EdgeInsets.only(left: 100, top: 250),
-          height: 100,
-          child: Text("오늘의 공부를 기록해주세요",
-              style: TextStyle(color: Colors.white, fontSize: 18)));
+          //margin: const EdgeInsets.only(left: 100, top: 250),
+          height: 500,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("아직 작성한 기록이 없어요",
+                  style: TextStyle(color: Colors.white, fontSize: 18)),
+              SizedBox(
+                height: 10,
+              ),
+              Text("+ 를 눌러 오늘의 공부를 기록하세요",
+              style: TextStyle(color: Colors.white, fontSize: 18))
+            ],)
+          );
     }
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, top: 20),
@@ -321,11 +350,69 @@ class _MyClipState extends State<MyClip> {
                                           color: Palette.backgroundColor)),
                                 ),
                                 TextButton(
-                                  onPressed: () async {
-                                    getDelete(picks[idx].id);
-                                    getHistories();
-                                    setState(() {});
-                                    Navigator.of(context).pop();
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10.0)),
+                                            title: Text("삭제"),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  "기록을 삭제 하시겠습니까?",
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              getDelete(picks[idx].id);
+                                                              getHistories();
+                                                              setState(() {});
+                                                              Navigator.of(context).pop();
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            child: Text(
+                                                              '삭제하기',
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight.bold,
+                                                                  color: Colors.redAccent),
+                                                            ),),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: Text(
+                                                            '취소',
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                color:
+                                                                    Colors.blue,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        });
                                   },
                                   child: Text("삭제하기",
                                       style:
@@ -373,7 +460,7 @@ class _MyClipState extends State<MyClip> {
                   ));
             } else if (idx == 4) {
               return Container(
-                margin: const EdgeInsets.only(left: 30,top: 15),
+                margin: const EdgeInsets.only(left: 30, top: 15),
                 child: Stack(
                   children: [
                     Container(
@@ -423,8 +510,8 @@ class _MyClipState extends State<MyClip> {
                   ],
                 ),
               );
-            }else if(idx == 5){
-              return  Container(
+            } else if (idx == 5) {
+              return Container(
                   margin: EdgeInsets.only(left: 150, top: 10),
                   child: Text(
                     "공부 강도",
@@ -432,7 +519,8 @@ class _MyClipState extends State<MyClip> {
                   ));
             } else if (idx == 6) {
               return Container(
-                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 child: Stack(
                   children: [
                     Container(
@@ -485,6 +573,44 @@ class _MyClipState extends State<MyClip> {
             }
             return Container();
           }),
+    );
+  }
+
+  Widget getAllHistories() {
+    return Container(
+      child: ListView.builder(
+          itemBuilder: (ctx, idx) {
+            if (idx == 0) {
+              return Container(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                child: Text(
+                  "나의 공부 기록",
+                  style: TextStyle(fontSize: 25, color: Palette.textColor1),
+                ),
+              );
+            }
+            if (idx == 1) {
+              return Container(
+                  child: Column(
+                children: List.generate(
+                  allPicks.length,
+                  (index) {
+                    return Container(
+                      child: InkWell(
+                        child: GetAllStudyCard(
+                          pick: allPicks[index],
+                          index: index,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ));
+            }
+            return Container();
+          },
+          itemCount: 10),
     );
   }
 }

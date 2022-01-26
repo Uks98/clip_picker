@@ -23,7 +23,8 @@ List<Color> colorBox = [
   Palette.listPick3,
   Palette.listPick4,
   Palette.listPick5,
-  Palette.listPick6
+  Palette.listPick6,
+  Palette.listPick7
 ];
 
 class GetLength {
@@ -115,7 +116,7 @@ class GetLength {
                         height: 10,
                       ),
                       Text(
-                        "당신의 도전을 응원합니다.",
+                        "자라나는 새싹",
                         style: TextStyle(fontSize: 16, color: Palette.textColor1),
                       )
                     ],
@@ -126,7 +127,7 @@ class GetLength {
           ],
         ),
       );
-    } else if (let <= 50) {
+    } else if (let <= 30) {
       return Container(
         margin: EdgeInsets.only(top: 40),
         child: Stack(
@@ -164,7 +165,7 @@ class GetLength {
                         height: 10,
                       ),
                       Text(
-                        "당신의 도전을 응원합니다.",
+                        "파릇파릇한 나무.",
                         style: TextStyle(fontSize: 16, color: Palette.textColor1),
                       )
                     ],

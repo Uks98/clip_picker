@@ -37,6 +37,7 @@ class ShowDetail extends StatelessWidget {
               if (index == 1) {
                 return Center(
                   child: picks.image.isEmpty?Container(
+                    child: Image.asset("lib/assets/noimg.png",fit: BoxFit.cover,),
                     margin: EdgeInsets.only(top: 30),
                     decoration: BoxDecoration(
                         color: Palette.floatingColor,
@@ -59,18 +60,18 @@ class ShowDetail extends StatelessWidget {
                 );
               } else if (index == 2) {
                 return Container(
-                  margin: EdgeInsets.only(left: 25, top: 10,right: 15),
+                  margin: EdgeInsets.only(left: 25, top: 15,right: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       picks.name.isEmpty ? Text(
                         "무제",
                         style: TextStyle(
-                            fontSize: 20, color: Palette.textColor),
+                            fontSize: 20, color: Palette.textColor1),
                       ):Text(
                         picks.name,
                         style: TextStyle(
-                            fontSize: 20, color: Palette.textColor),
+                            fontSize: 20, color: Palette.textColor1),
                       ),
                     ],
                   ),
@@ -78,7 +79,7 @@ class ShowDetail extends StatelessWidget {
               }else if(index ==3 ){
                 return Container(
                   margin: EdgeInsets.only(left: 25,top: 15,right: 20),
-                  child: Text("공부시간 • ${picks.studyTime}분",
+                  child: Text("공부시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(pick.studyTime  % 60).toString()}분",
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 );

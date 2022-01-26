@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:clip_picker/data/database.dart';
 import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/utils.dart';
+import 'package:clip_picker/show_detail.dart';
 import 'package:clip_picker/style/color_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,16 @@ class StudyAddPage extends StatefulWidget {
 }
 
 class _StudyAddPageState extends State<StudyAddPage> {
-
   DateTime dateTime = DateTime.now();
+
   Pick get pick => widget.pick;
   TextEditingController titleController = TextEditingController();
   TextEditingController memoController = TextEditingController();
   TextEditingController studyTimeController = TextEditingController();
-  @override
 
+
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -51,10 +54,11 @@ class _StudyAddPageState extends State<StudyAddPage> {
                   final db = DatabaseHelper.instance;
                   pick.name = titleController.text;
                   pick.memo = memoController.text;
-                  if(studyTimeController.text.isEmpty){
+                  if (studyTimeController.text.isEmpty) {
                     pick.studyTime = 0;
-                  }else{
-                    pick.studyTime = int.tryParse(studyTimeController.text) ?? 0;
+                  } else {
+                    pick.studyTime =
+                        int.tryParse(studyTimeController.text) ?? 0;
                   }
                   await db.insertPick(pick);
                   Navigator.of(context).pop();
@@ -104,16 +108,16 @@ class _StudyAddPageState extends State<StudyAddPage> {
                     ),
                   );
                 } else if (idx == 1) {
-
                 } else if (idx == 2) {
                   return Container(
-                    margin: EdgeInsets.only(left: 20,top: 20),
+                    margin: EdgeInsets.only(left: 20, top: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "공부 시간",
-                          style: TextStyle(color: Palette.textColor1,fontSize: 18),
+                          style: TextStyle(
+                              color: Palette.textColor1, fontSize: 18),
                         ),
                         Column(
                           children: [
@@ -134,23 +138,32 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                     decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Palette.textColor, width: 1.0),
-                                        borderRadius: BorderRadius.circular(12.0),
+                                            color: Palette.textColor,
+                                            width: 1.0),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
-                                        border: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.white, width: 0.5),
-                                            borderRadius: BorderRadius.circular(8)),
+                                      border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white, width: 0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Palette.textColor, width: 2.0),
+                                            color: Palette.textColor,
+                                            width: 2.0),
                                       ),
                                     ),
                                   ),
                                   width: 70,
                                 ),
                                 Container(
-                                  child: Text(" 분", style: TextStyle(color: Palette.textColor1,fontSize: 18),),
+                                  child: Text(
+                                    " 분",
+                                    style: TextStyle(
+                                        color: Palette.textColor1,
+                                        fontSize: 18),
+                                  ),
                                 )
                               ],
                             ),
@@ -360,7 +373,11 @@ class _StudyAddPageState extends State<StudyAddPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 20.0),
-                        child: Text("색상",style: TextStyle(fontSize: 18,color: Palette.textColor1),),
+                        child: Text(
+                          "색상",
+                          style: TextStyle(
+                              fontSize: 18, color: Palette.textColor1),
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -390,8 +407,9 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                               ? Colors.yellow[200]
                                               : Colors.transparent,
                                         ),
-                                          color: colorBox[idx],
-                                          borderRadius: BorderRadius.circular(20),),
+                                        color: colorBox[idx],
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
                                       width: 40,
                                       height: 40,
                                     ),
@@ -415,7 +433,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 20.0,top: 10),
+                          padding: const EdgeInsets.only(left: 20.0, top: 10),
                           child: Text(
                             "사진으로 기록남기기",
                             style: TextStyle(
@@ -513,21 +531,22 @@ class StudyCard extends StatelessWidget {
                               letterSpacing: 0.3),
                         )
                       : Container(
-                        child: Text(
+                          child: Text(
                             "${pick.name}".toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3),
+                                letterSpacing: 0.4),
                           ),
-                    width: 200,
-                      ),
+                          width: 200,
+                        ),
                   SizedBox(
                     height: 15,
                   ),
                   Text(
-                    "공부 시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(pick.studyTime  % 60)}분".toString(),
+                    "공부 시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(pick.studyTime % 60)}분"
+                        .toString(),
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   SizedBox(
@@ -542,7 +561,6 @@ class StudyCard extends StatelessWidget {
                             studyType[pick.studyType],
                             style: TextStyle(
                                 color: Colors.black,
-
                                 fontSize: 18,
                                 letterSpacing: 0.3),
                           ),
@@ -580,7 +598,7 @@ class StudyCard extends StatelessWidget {
                   pick.memo.isEmpty
                       ? Container()
                       : Container(
-                    width: 200,
+                          width: 200,
                           child: Text(
                             pick.memo.toString(),
                             style: TextStyle(
@@ -615,6 +633,160 @@ class StudyCard extends StatelessWidget {
           ),
         )))
       ],
+    );
+  }
+}
+
+class GetAllStudyCard extends StatefulWidget {
+  final Pick pick;
+  int index;
+
+  GetAllStudyCard({Key key, this.pick,this.index}) : super(key: key);
+
+  @override
+  State<GetAllStudyCard> createState() => _GetAllStudyCardState();
+}
+
+class _GetAllStudyCardState extends State<GetAllStudyCard> {
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ShowDetail(
+          picks: widget.pick,
+        )));
+      },
+      child: Stack(
+        children: [
+          Center(
+              child: Container(
+                  child: Container(
+            margin: EdgeInsets.all(10),
+            child: Card(
+              color: colorBox[widget.pick.color],
+              elevation: 1,
+              child: Container(
+                margin: const EdgeInsets.only(left: 25, top: 17, right: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    widget.pick.name.isEmpty
+                        ? Text(
+                            "무제",
+                            style: TextStyle(
+                                color: Palette.textColor,
+                                fontSize: 18,
+                                letterSpacing: 0.3),
+                          )
+                        : Container(
+                            child: Text(
+                              "${widget.pick.name}".toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.3),
+                            ),
+                            width: 400,
+                          ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      "공부 시간 · ${Utils.makeTwoDigit(widget.pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(widget.pick.studyTime % 60)}분"
+                          .toString(),
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Text(
+                              studyType[widget.pick.studyType],
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  letterSpacing: 0.3),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(4)),
+                          margin: EdgeInsets.all(2),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Text(
+                                studyHard[widget.pick.hardStudy],
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    letterSpacing: 0.3),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    widget.pick.memo.isEmpty
+                        ? Container()
+                        : Container(
+                            width: 400,
+                            child: Text(
+                              widget.pick.memo.toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  letterSpacing: 0.4),
+                              maxLines: 10,
+                            ),
+                          ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    widget.pick.image.isEmpty
+                        ? Container()
+                        : Container(
+                            width: 160,
+                            height: 160,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: AssetThumb(
+                                asset: Asset(widget.pick.image, "noimg.png", 0, 0),
+                                width: 160,
+                                height: 160,
+                              ),
+                            )),
+                    Container(
+                        margin: const EdgeInsets.only(left: 240, bottom: 10),
+                        child: Text(
+                          "${Utils.numToDateTime2(widget.pick.date)}".replaceAll('00:00:00.000', ""),
+                          style: TextStyle(
+                              fontSize: 16, color: Palette.textColor1),
+                        ),)
+                  ],
+                ),
+              ),
+            ),
+          )))
+        ],
+      ),
     );
   }
 }
