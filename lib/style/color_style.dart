@@ -12,6 +12,8 @@ class Palette{
   static const cardColor = Color(0xff5c677d);
   static const pick = Color(0xff81b29a);
   static const pick2 = Color(0xfff2cc8f);
+  static const chartColor = Color(0xffa2d2ff);
+  static const unchartColor = Color(0xffcdb4db);
 
 
   static const listPick = Color(0xffcdb4db);

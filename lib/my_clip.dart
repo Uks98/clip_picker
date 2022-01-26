@@ -4,6 +4,7 @@ import 'package:clip_picker/data/utils.dart';
 import 'package:clip_picker/show_detail.dart';
 import 'package:clip_picker/stydyaddpage.dart';
 import 'package:clip_picker/style/color_style.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -21,6 +22,7 @@ class _MyClipState extends State<MyClip> {
   final dbHelper = DatabaseHelper.instance;
   CalendarController calendarController = CalendarController();
   int currentIndex = 0;
+  int chartIndex = 0;
   DateTime dateTime = DateTime.now();
   DateTime _date;
   List<Pick> picks = [];
@@ -519,8 +521,7 @@ class _MyClipState extends State<MyClip> {
                   ));
             } else if (idx == 6) {
               return Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 child: Stack(
                   children: [
                     Container(
@@ -534,7 +535,7 @@ class _MyClipState extends State<MyClip> {
                       children: [
                         Container(
                             margin: EdgeInsets.only(top: 10),
-                            height: 300,
+                            height: 200,
                             child: ListView.separated(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -566,6 +567,83 @@ class _MyClipState extends State<MyClip> {
                                   );
                                 })),
                       ],
+                    )
+                  ],
+                ),
+              );
+            }else if(idx == 7){
+              List<FlSpot> spots = [];
+              for (final w in allPicks) {
+                if (chartIndex == 0) {
+                  //몸무게
+                  spots.add(FlSpot(w.date.toDouble(), w.studyTime.toDouble()));}
+              }
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              chartIndex = 0;
+                            });
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: chartIndex == 0 ? Palette.chartColor : Palette.unchartColor,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
+                              child: Text(
+                                "운동시간",
+                                style: TextStyle(
+                                    color: chartIndex == 0
+                                        ? Palette.chartColor : Palette.unchartColor),
+                              )),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 16),
+                      decoration: BoxDecoration(
+                          color: Palette.chartColor,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 4,
+                                spreadRadius: 4,
+                                color: Colors.black12)
+                          ]),
+                      height: 200,
+                      child: spots.isEmpty?Container():LineChart(
+                          LineChartData(
+                              lineBarsData: [
+                                //각 항목에 대한 데이터가 들어가는 곳
+                                LineChartBarData(spots: spots, colors: [Palette.chartColor])
+                              ],
+                              gridData: FlGridData(show: false),
+                              borderData: FlBorderData(show: false),
+                              lineTouchData: LineTouchData(touchTooltipData:
+                              LineTouchTooltipData(getTooltipItems: (spots) {
+                                return [
+                                  LineTooltipItem("${spots.first.y}",
+                                      TextStyle(color: Palette.chartColor))
+                                ];
+                              })),
+                              titlesData: FlTitlesData(
+                                  bottomTitles: SideTitles(
+                                      showTitles: true,
+                                      //하단 아래에 날짜표시
+                                      getTitles: (value) {
+                                        DateTime date = Utils.stringToDateTime(
+                                            value.toInt().toString());
+                                        return "${date.day}일";
+                                      }),
+                                  leftTitles: SideTitles(showTitles: false)))),
                     )
                   ],
                 ),
