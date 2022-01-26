@@ -27,6 +27,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
   TextEditingController memoController = TextEditingController();
   TextEditingController studyTimeController = TextEditingController();
   @override
+
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -50,11 +51,10 @@ class _StudyAddPageState extends State<StudyAddPage> {
                   final db = DatabaseHelper.instance;
                   pick.name = titleController.text;
                   pick.memo = memoController.text;
-                  pick.studyTime = int.parse(studyTimeController.text) ?? 0;
-                  if (studyTimeController.text.isEmpty) {
+                  if(studyTimeController.text.isEmpty){
                     pick.studyTime = 0;
-                  }else {
-                    pick.studyTime= int.parse(studyTimeController.text) ?? 0;
+                  }else{
+                    pick.studyTime = int.tryParse(studyTimeController.text) ?? 0;
                   }
                   await db.insertPick(pick);
                   Navigator.of(context).pop();
@@ -72,7 +72,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
               itemBuilder: (ctx, idx) {
                 if (idx == 0) {
                   return Container(
-                    margin: EdgeInsets.all(12),
+                    margin: EdgeInsets.only(left: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -82,7 +82,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                         Text(
                           "공부 제목",
                           style: TextStyle(
-                              color: Palette.textColor1, fontSize: 15),
+                              color: Palette.textColor1, fontSize: 18),
                         ),
                         Container(
                           child: TextField(
@@ -106,43 +106,53 @@ class _StudyAddPageState extends State<StudyAddPage> {
                 } else if (idx == 1) {
 
                 } else if (idx == 2) {
-                  String _ts = pick.studyTime.toString();
-                  String _ms = _ts.substring(
-                    _ts.length - 2,
-                  ); //뒤에 분 가져오자
-                  String _h = _ts.substring(
-                    0,
-                    _ts.length - 2,
-                  );
-                  DateTime times = DateTime.now();
                   return Container(
-                    margin: EdgeInsets.only(left: 12),
+                    margin: EdgeInsets.only(left: 20,top: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "공부 시간",
-                          style: TextStyle(color: Palette.textColor1),
+                          style: TextStyle(color: Palette.textColor1,fontSize: 18),
                         ),
                         Column(
                           children: [
                             SizedBox(
                               height: 10,
                             ),
-                            Container(
-                              child: TextField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                controller: studyTimeController,
-                                textAlign: TextAlign.end,
-                                decoration: InputDecoration(
-                                    border: UnderlineInputBorder(
+                            Row(
+                              children: [
+                                Container(
+                                  child: TextField(
+                                    style: TextStyle(color: Palette.textColor1),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    controller: studyTimeController,
+                                    textAlign: TextAlign.end,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.white, width: 0.5),
-                                        borderRadius: BorderRadius.circular(8))),
-                              ),
-                              width: 70,
+                                            color: Palette.textColor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(12.0),
+                                      ),
+                                        border: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.white, width: 0.5),
+                                            borderRadius: BorderRadius.circular(8)),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Palette.textColor, width: 2.0),
+                                      ),
+                                    ),
+                                  ),
+                                  width: 70,
+                                ),
+                                Container(
+                                  child: Text(" 분", style: TextStyle(color: Palette.textColor1,fontSize: 18),),
+                                )
+                              ],
                             ),
                             SizedBox(
                               height: 20,
@@ -158,7 +168,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 17.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
                             "메모",
                             style: TextStyle(
@@ -210,7 +220,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                   );
                 } else if (idx == 5) {
                   return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      margin: EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         children: [
                           SizedBox(
@@ -236,7 +246,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                           height: 20,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
+                          padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
                             "공부 종류",
                             style: TextStyle(
@@ -262,7 +272,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: pick.studyType == _idx
-                                          ? Palette.onpressButton
+                                          ? Palette.pick2
                                           : Colors.white),
                                   alignment: Alignment.center,
                                   child: Text(
@@ -293,7 +303,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                           height: 20,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
+                          padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
                             "공부 강도",
                             style: TextStyle(
@@ -319,7 +329,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: pick.hardStudy == idx
-                                          ? Palette.onpressButton
+                                          ? Palette.pick
                                           : Colors.white),
                                   alignment: Alignment.center,
                                   child: Text(
@@ -345,32 +355,52 @@ class _StudyAddPageState extends State<StudyAddPage> {
                     ),
                   );
                 } else if (idx == 8) {
-                  return Container(
-                    height: 40,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: colorBox.length,
-                        itemBuilder: (ctx, idx) {
-                          return Row(
-                            children: [
-                              SizedBox(
-                                width: 12,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    pick.color = idx;
-                                  });
-                                },
-                                child: Container(
-                                  color: colorBox[idx],
-                                  width: 20,
-                                  height: 20,
-                                ),
-                              )
-                            ],
-                          );
-                        }),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Text("색상",style: TextStyle(fontSize: 18,color: Palette.textColor1),),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        height: 40,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: colorBox.length,
+                            itemBuilder: (ctx, idx) {
+                              return Row(
+                                children: [
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        pick.color = idx;
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 3,
+                                          color: idx == pick.color
+                                              ? Colors.yellow[200]
+                                              : Colors.transparent,
+                                        ),
+                                          color: colorBox[idx],
+                                          borderRadius: BorderRadius.circular(20),),
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                                  )
+                                ],
+                              );
+                            }),
+                      ),
+                    ],
                   );
                 } else if (idx == 9) {
                   return Divider(
@@ -385,7 +415,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
+                          padding: const EdgeInsets.only(left: 20.0,top: 10),
                           child: Text(
                             "사진으로 기록남기기",
                             style: TextStyle(
@@ -393,11 +423,11 @@ class _StudyAddPageState extends State<StudyAddPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Container(
                             margin: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
+                                vertical: 16, horizontal: 20),
                             width: 130,
                             height: 130,
                             child: InkWell(
@@ -460,25 +490,6 @@ class StudyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String _t = pick.time.toString();
-    String _m = _t.substring(
-      _t.length - 2,
-    ); //뒤에 분 가져오자
-    String _h = _t.substring(
-      0,
-      _t.length - 2,
-    );
-    TimeOfDay _times = TimeOfDay(hour: int.parse(_h), minute: int.parse(_m));
-
-    String _ts = pick.studyTime.toString();
-    String _ms = _ts.substring(
-      _t.length - 2,
-    ); //뒤에 분 가져오자
-    String _hs = _ts.substring(
-      0,
-      _ts.length - 2,
-    );
-    TimeOfDay _timesa = TimeOfDay(hour: int.parse(_hs), minute: int.parse(_ms));
     return Stack(
       children: [
         Center(
@@ -503,7 +514,7 @@ class StudyCard extends StatelessWidget {
                         )
                       : Container(
                         child: Text(
-                            "${pick.name}",
+                            "${pick.name}".toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -513,32 +524,14 @@ class StudyCard extends StatelessWidget {
                     width: 200,
                       ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "${_times.hour > 11 ? "오후 " : "오전 "}"
-                        "${Utils.makeTwoDigit(_times.hour % 12)}"
-                        ":${Utils.makeTwoDigit(_times.minute)}분",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        " / ",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      Text(
-                        "${pick.date}"
-                       //"${Utils.makeTwoDigit(_timesa.hour % 12)}시간"
-                       //":${Utils.makeTwoDigit(_timesa.minute)}분",
-                       //style: TextStyle(color: Colors.white, fontSize: 16),
-                       //textAlign: TextAlign.center,
-                      ),
-                    ],
+                  Text(
+                    "공부 시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(pick.studyTime  % 60)}분".toString(),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   Row(
                     children: [
@@ -549,12 +542,13 @@ class StudyCard extends StatelessWidget {
                             studyType[pick.studyType],
                             style: TextStyle(
                                 color: Colors.black,
+
                                 fontSize: 18,
                                 letterSpacing: 0.3),
                           ),
                         ),
                         decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(4)),
                         margin: EdgeInsets.all(2),
                       ),
@@ -574,14 +568,14 @@ class StudyCard extends StatelessWidget {
                             ),
                           ),
                           decoration: BoxDecoration(
-                              color: Colors.grey[200],
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(4)),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   pick.memo.isEmpty
                       ? Container()

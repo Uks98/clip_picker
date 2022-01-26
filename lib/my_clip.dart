@@ -1,3 +1,4 @@
+import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/pick_class.dart';
 import 'package:clip_picker/data/utils.dart';
 import 'package:clip_picker/show_detail.dart';
@@ -21,14 +22,36 @@ class _MyClipState extends State<MyClip> {
   CalendarController calendarController = CalendarController();
   int currentIndex = 0;
   DateTime dateTime = DateTime.now();
+  DateTime _date;
   List<Pick> picks = [];
+  List<Pick> allPicks = [];
+  List<Pick> dataPicks = [];
+  List<Pick> events = [];
+
+  int _d;
+  int _s;
 
   void getHistories() async {
-    int _d = Utils.getFormatTime(dateTime);
+    _d = Utils.getFormatTime(dateTime);
     picks = await dbHelper.queryPickByDate(_d);
     setState(() {});
   }
-  void getDelete(int id) async{
+
+  void getPicks() async {
+    for (final p in dataPicks) {
+      _date = Utils.numToDateTime2(p.date);
+      print(p.date);
+      events[p.date] = p;
+    }
+  }
+
+  void getAllStudy() async {
+    allPicks = await dbHelper.queryAllPick();
+    setState(() {
+    });
+  }
+
+  void getDelete(int id) async {
     await DatabaseHelper.instance.delete(id);
   }
 
@@ -37,6 +60,8 @@ class _MyClipState extends State<MyClip> {
     // TODO: implement initState
     super.initState();
     getHistories();
+    getAllStudy();
+    getPicks();
   }
 
   @override
@@ -61,13 +86,19 @@ class _MyClipState extends State<MyClip> {
           setState(() {
             currentIndex = idx;
           });
+          if (currentIndex == 0) {
+            return getAllStudy();
+          } else {
+            print(allPicks.length);
+            return getAllStudy();
+          }
         },
         selectedLabelStyle:
             TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
         selectedItemColor: Palette.textColor,
       ),
       backgroundColor: Palette.backgroundColor,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: [0].contains(currentIndex)?FloatingActionButton(
         backgroundColor: Palette.floatingColor,
         child: Icon(Icons.add),
         onPressed: () {
@@ -87,7 +118,7 @@ class _MyClipState extends State<MyClip> {
                                         name: "",
                                         memo: "",
                                         time: 0110,
-                                        studyTime: 1100,
+                                        studyTime: 0,
                                         studyType: 0,
                                         hardStudy: 0,
                                         image: "",
@@ -110,13 +141,15 @@ class _MyClipState extends State<MyClip> {
                 );
               });
         },
-      ),
+      ):Container()
     );
   }
 
   Widget getPage() {
     if (currentIndex == 0) {
       return getRecordStudy();
+    } else if (currentIndex == 1) {
+      return getAllStudyPicker();
     }
   }
 
@@ -125,31 +158,32 @@ class _MyClipState extends State<MyClip> {
       child: ListView.builder(
           itemCount: 3,
           itemBuilder: (context, index) {
+            //Map<DateTime, List<dynamic>> _events = {_date: []};
             if (index == 0) {
-              return Container(
-                child: TableCalendar(
-                  locale: 'ko-KR',
-                  calendarStyle: CalendarStyle(
-                    outsideWeekendStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                    outsideStyle: TextStyle(
-                        color: Palette.textColor1,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                    weekdayStyle: TextStyle(
-                        // 블로그
-                        color: Palette.textColor1,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                    weekendStyle: TextStyle(
-                        // 블로그
-                        color: Colors.redAccent,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  builders: CalendarBuilders(
+              return TableCalendar(
+                // events: _events,
+                locale: 'ko-KR',
+                calendarStyle: CalendarStyle(
+                  outsideWeekendStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  outsideStyle: TextStyle(
+                      color: Palette.textColor1,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  weekdayStyle: TextStyle(
+                      // 블로그
+                      color: Palette.textColor1,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  weekendStyle: TextStyle(
+                      // 블로그
+                      color: Colors.redAccent,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                builders: CalendarBuilders(
                     todayDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
@@ -180,27 +214,38 @@ class _MyClipState extends State<MyClip> {
                             fontWeight: FontWeight.bold,
                           ),
                         )),
-                  ),
-                  onDaySelected: (date, events, holidays) {
-                      getHistories();
-                    dateTime = date;
-                  },
-                  initialCalendarFormat: CalendarFormat.twoWeeks,
-                  availableCalendarFormats: {CalendarFormat.twoWeeks: ""},
-                  headerStyle: HeaderStyle(
-                    centerHeaderTitle: true,
-                    titleTextStyle: TextStyle(
-                        color: Palette.textColor1,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                    formatButtonDecoration: BoxDecoration(
+                    markersBuilder: (context, date, events, holiday) {
+                      dateTime = date;
+                      if (events.isNotEmpty) {
+                        return [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            color: Colors.redAccent,
+                          )
+                        ];
+                      } else {
+                        return [Container()];
+                      }
+                    }),
+                onDaySelected: (date, events, holidays) {
+                  dateTime = date;
+                },
+                initialCalendarFormat: CalendarFormat.twoWeeks,
+                availableCalendarFormats: {CalendarFormat.twoWeeks: ""},
+                headerStyle: HeaderStyle(
+                  centerHeaderTitle: true,
+                  titleTextStyle: TextStyle(
                       color: Palette.textColor1,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  formatButtonDecoration: BoxDecoration(
+                    color: Palette.textColor1,
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  initialSelectedDay: dateTime,
-                  calendarController: calendarController,
                 ),
+                initialSelectedDay: dateTime,
+                calendarController: calendarController,
               );
             } else if (index == 1) {
               getHistories();
@@ -216,80 +261,230 @@ class _MyClipState extends State<MyClip> {
   Widget getStudy() {
     if (picks.isEmpty) {
       return Container(
-          margin: EdgeInsets.only(left: 100, top: 250),
+          margin: const EdgeInsets.only(left: 100, top: 250),
           height: 100,
           child: Text("오늘의 공부를 기록해주세요",
               style: TextStyle(color: Colors.white, fontSize: 18)));
     }
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0,top: 20),
-      child:  Container(
-          height: 450,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              physics: ScrollPhysics(),
-              itemCount: picks.length,
-              itemBuilder: (ctx, idx) {
-                return InkWell(
-                    onTap: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return Container(
-                              height: 100,
-                              child: Column(
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (ctx) => ShowDetail(
-                                            index:idx,
-                                            picks: Pick(
-                                              date: Utils.getFormatTime(dateTime),
-                                              name: picks[idx].name,
-                                              memo: picks[idx].memo,
-                                              time: picks[idx].time,
-                                              studyTime: picks[idx].studyTime,
-                                              studyType: picks[idx].studyType,
-                                              hardStudy: picks[idx].hardStudy,
-                                              image: picks[idx].image,
-                                              color: 0,
-                                            ),
+      padding: const EdgeInsets.only(left: 10.0, top: 20),
+      child: Container(
+        height: 450,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            physics: ScrollPhysics(),
+            itemCount: picks.length,
+            itemBuilder: (ctx, idx) {
+              return InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            height: 150,
+                            child: Column(
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (ctx) => ShowDetail(
+                                          index: idx,
+                                          picks: Pick(
+                                            date: Utils.getFormatTime(dateTime),
+                                            name: picks[idx].name,
+                                            memo: picks[idx].memo,
+                                            time: picks[idx].time,
+                                            studyTime: picks[idx].studyTime,
+                                            studyType: picks[idx].studyType,
+                                            hardStudy: picks[idx].hardStudy,
+                                            image: picks[idx].image,
+                                            color: 0,
                                           ),
-                                        ));
-                                      },
-                                      child: Text(
-                                        "공부기록 상세보기",
-                                        style: TextStyle(
-                                            color: Palette.backgroundColor),
-                                      )),
-                                  TextButton(
-                                    onPressed: () async{
-                                      getDelete(picks[idx].id);
-                                      getHistories();
-                                      setState(() {});
-                                      Navigator.of(context).pop();
+                                        ),
+                                      ));
                                     },
-                                    child: Text("삭제하기",
-                                        style: TextStyle(
-                                            color: Palette.backgroundColor)),
-                                  )
-                                ],
-                              ),
-                            );
-                          });
-                    },
-                    child: SingleChildScrollView(
-                      child: Container(
-                        child: StudyCard(
-                          pick: picks[idx],
-                        ),
+                                    child: Text(
+                                      "공부기록 상세보기",
+                                      style: TextStyle(
+                                          color: Palette.backgroundColor),
+                                    )),
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) => StudyAddPage(
+                                                pick: picks[idx])));
+                                  },
+                                  child: Text("수정하기",
+                                      style: TextStyle(
+                                          color: Palette.backgroundColor)),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    getDelete(picks[idx].id);
+                                    getHistories();
+                                    setState(() {});
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("삭제하기",
+                                      style:
+                                          TextStyle(color: Colors.redAccent)),
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                  child: SingleChildScrollView(
+                    child: Container(
+                      child: StudyCard(
+                        pick: picks[idx],
                       ),
-                    ));
-              }),
-        ),
+                    ),
+                  ));
+            }),
+      ),
+    );
+  }
 
+  Widget getAllStudyPicker() {
+    return Container(
+      child: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (ctx, idx) {
+            if (idx == 1) {
+              return Container(
+                margin: EdgeInsets.only(left: 20, top: 30),
+                child: Text(
+                  "통계",
+                  style: TextStyle(fontSize: 30, color: Palette.textColor1),
+                ),
+              );
+            } else if (idx == 2) {
+              Widget growImages = GetLength().getStudyLgt(allPicks.length);
+              return Container(child: growImages);
+            } else if (idx == 3) {
+              return Container(
+                  margin: EdgeInsets.only(left: 150, top: 30),
+                  child: Text(
+                    "공부 분석",
+                    style: TextStyle(fontSize: 25, color: Palette.textColor1),
+                  ));
+            } else if (idx == 4) {
+              return Container(
+                margin: const EdgeInsets.only(left: 30,top: 15),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 350,
+                      height: 340,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(top: 10),
+                            height: 350,
+                            child: ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                separatorBuilder: (context, index) {
+                                  return Divider(
+                                    thickness: 1,
+                                    indent: 0,
+                                    endIndent: 0,
+                                  );
+                                },
+                                itemCount: studyType.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text("${studyType[index]}",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.grey[800])),
+                                        Text(
+                                            "${allPicks.where((element) => element.studyType == index).length}개",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.grey[800])),
+                                      ],
+                                    ),
+                                  );
+                                })),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            }else if(idx == 5){
+              return  Container(
+                  margin: EdgeInsets.only(left: 150, top: 10),
+                  child: Text(
+                    "공부 강도",
+                    style: TextStyle(fontSize: 25, color: Palette.textColor1),
+                  ));
+            } else if (idx == 6) {
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 350,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(top: 10),
+                            height: 300,
+                            child: ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                separatorBuilder: (context, _index) {
+                                  return Divider(
+                                    thickness: 1,
+                                    indent: 0,
+                                    endIndent: 0,
+                                  );
+                                },
+                                itemCount: studyHard.length,
+                                itemBuilder: (context, idx) {
+                                  return Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text("${studyHard[idx]}",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[800])),
+                                        Text(
+                                            "${allPicks.where((element) => element.hardStudy == idx).length}개",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.grey[800])),
+                                      ],
+                                    ),
+                                  );
+                                })),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            }
+            return Container();
+          }),
     );
   }
 }

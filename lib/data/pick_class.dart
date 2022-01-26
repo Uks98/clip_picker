@@ -9,6 +9,7 @@ class Pick {
   int hardStudy;
   String image;
   int color;
+
   Pick({this.id,this.name, this.memo, this.time, this.date,this.studyTime, this.studyType,
     this.hardStudy, this.image,this.color,});
 

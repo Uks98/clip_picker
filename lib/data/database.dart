@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static final _databaseName = "pick.db";
-  static final _databaseVersion = 3;
+  static final _databaseVersion = 6;
   static final pickTable = "pick";
 
   DatabaseHelper._privateConstructor();
@@ -78,11 +78,12 @@ class DatabaseHelper {
 
     final query = await db.query(pickTable);
 
-    for(final r in query){
-      picks.add(Pick.fromDB(r));
+    for(final q in query){
+      picks.add(Pick.fromDB(q));
     }
     return picks;
   }
+
   Future<int> delete(int id)async{
     Database db = await instance.database;
     return await db.delete(pickTable,where: "id = ?",whereArgs: [id]);

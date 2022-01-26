@@ -66,7 +66,7 @@ class ShowDetail extends StatelessWidget {
                       picks.name.isEmpty ? Text(
                         "무제",
                         style: TextStyle(
-                            fontSize: 30, color: Palette.textColor),
+                            fontSize: 20, color: Palette.textColor),
                       ):Text(
                         picks.name,
                         style: TextStyle(
@@ -75,59 +75,18 @@ class ShowDetail extends StatelessWidget {
                     ],
                   ),
                 );
-              } else if (index == 3) {
-                String _t = pick.time.toString();
-                String _m = _t.substring(
-                  _t.length - 2,
-                ); //뒤에 분 가져오자
-                String _h = _t.substring(
-                  0,
-                  _t.length - 2,
-                );
-                TimeOfDay _times =
-                TimeOfDay(hour: int.parse(_h), minute: int.parse(_m));
-
-                String _ts = pick.studyTime.toString();
-                String _ms = _ts.substring(
-                  _t.length - 2,
-                ); //뒤에 분 가져오자
-                String _hs = _ts.substring(
-                  0,
-                  _ts.length - 2,
-                );
-                TimeOfDay _timesa = TimeOfDay(hour: int.parse(_hs), minute: int.parse(_ms));
+              }else if(index ==3 ){
                 return Container(
-                  margin: EdgeInsets.only(left: 25,top: 15,),
-                  child: Row(
-                    children: [
-                      Text(
-                        "${_times.hour > 11 ? "오후 " : "오전 "}"
-                            "${Utils.makeTwoDigit(_times.hour % 12)}"
-                            ":${Utils.makeTwoDigit(_times.minute)}분",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        " / ",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      Text(
-                        "${Utils.makeTwoDigit(_timesa.hour % 12)}시간"
-                            ":${Utils.makeTwoDigit(_timesa.minute)}분",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      )
-                    ],
+                  margin: EdgeInsets.only(left: 25,top: 15,right: 20),
+                  child: Text("공부시간 • ${picks.studyTime}분",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 );
               }else if(index == 4){
                 return Container(
-                  margin: EdgeInsets.only(left: 25,top: 20,right: 20),
+                  margin: EdgeInsets.only(left: 25,top: 15,right: 20),
                   child: Text(picks.memo,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ));
               }else if(index == 5){
                 return Container(
@@ -173,7 +132,7 @@ class ShowDetail extends StatelessWidget {
                   ),
                 );
               }else if(index == 6){
-                return SizedBox(height: 30,);
+                return SizedBox(height: 20);
               }
               return Container();
             }),
