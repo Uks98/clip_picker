@@ -8,6 +8,7 @@ import 'package:clip_picker/style/color_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'data/pick_class.dart';
 
@@ -61,6 +62,8 @@ class _StudyAddPageState extends State<StudyAddPage> {
                         int.tryParse(studyTimeController.text) ?? 0;
                   }
                   await db.insertPick(pick);
+                 InAppReview.instance.requestReview();
+                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
                 child: Text("저장"))
@@ -279,6 +282,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                 onTap: () {
                                   setState(() {
                                     pick.studyType = _idx;
+                                    FocusScope.of(context).unfocus();
                                   });
                                 },
                                 child: Container(
@@ -526,7 +530,7 @@ class StudyCard extends StatelessWidget {
                       ? Text(
                           "무제",
                           style: TextStyle(
-                              color: Palette.textColor,
+                              color: Palette.textColor1,
                               fontSize: 18,
                               letterSpacing: 0.3),
                         )

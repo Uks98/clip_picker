@@ -15,7 +15,7 @@ List<String> studyType = [
   "독서",
   "기타"
 ];
-List<String> studyHard = ["가볍게", "보통", "조금 열심히", "열심히", "빡세게"];
+List<String> studyHard = ["가볍게", "보통", "열심히", "빡세게"];
 List<Color> colorBox = [
   Palette.listPick,
   Palette.listPick1,
@@ -78,7 +78,7 @@ class GetLength {
           ],
         ),
       );
-    } else if (let <= 11) {
+    } else if (let >= 10) {
       return Container(
         margin: EdgeInsets.only(top: 40),
         child: Stack(
@@ -127,7 +127,7 @@ class GetLength {
           ],
         ),
       );
-    } else if (let <= 30) {
+    } else if (let < 30) {
       return Container(
         margin: EdgeInsets.only(top: 40),
         child: Stack(

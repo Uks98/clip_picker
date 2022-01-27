@@ -1,6 +1,7 @@
 import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/pick_class.dart';
 import 'package:clip_picker/data/utils.dart';
+import 'package:clip_picker/setting.dart';
 import 'package:clip_picker/show_detail.dart';
 import 'package:clip_picker/stydyaddpage.dart';
 import 'package:clip_picker/style/color_style.dart';
@@ -25,13 +26,12 @@ class _MyClipState extends State<MyClip> {
   int chartIndex = 0;
   DateTime dateTime = DateTime.now();
   DateTime _date;
+  Map<DateTime, List<dynamic>> _events = {};
   List<Pick> picks = [];
   List<Pick> allPicks = [];
   List<Pick> dataPicks = [];
   List<Pick> events = [];
-
   int _d;
-  int _s;
 
   void getHistories() async {
     _d = Utils.getFormatTime(dateTime);
@@ -39,13 +39,13 @@ class _MyClipState extends State<MyClip> {
     setState(() {});
   }
 
-  void getPicks() async {
-    for (final p in dataPicks) {
-      _date = Utils.numToDateTime2(p.date);
-      print(p.date);
-      events[p.date] = p;
-    }
-  }
+ //void getPicks(){
+ //  DateTime date;
+ //  for(final picker in allPicks){
+ //   date = Utils.numToDateTime2(picker.date);
+ //    _events[date] = [picker];
+ //  }
+ // }
 
   void getAllStudy() async {
     allPicks = await dbHelper.queryAllPick();
@@ -62,7 +62,6 @@ class _MyClipState extends State<MyClip> {
     super.initState();
     getHistories();
     getAllStudy();
-    getPicks();
   }
 
   @override
@@ -149,7 +148,9 @@ class _MyClipState extends State<MyClip> {
                                         color: Palette.backgroundColor),
                                   )),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>Setting()));
+                                },
                                 child: Text("설정",
                                     style: TextStyle(
                                         color: Palette.backgroundColor)),
@@ -178,32 +179,42 @@ class _MyClipState extends State<MyClip> {
       child: ListView.builder(
           itemCount: 3,
           itemBuilder: (context, index) {
-            //Map<DateTime, List<dynamic>> _events = {_date: []};
             if (index == 0) {
+              DateTime date;
+              Map<DateTime, List<dynamic>> _events = {};
+              for(final picker in allPicks){
+                date = Utils.numToDateTime2(picker.date);
+                _events[date] = [picker];
+              }
               return TableCalendar(
-                // events: _events,
+                 events: _events,
                 locale: 'ko-KR',
                 calendarStyle: CalendarStyle(
-                  outsideWeekendStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  outsideStyle: TextStyle(
-                      color: Palette.textColor1,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  weekdayStyle: TextStyle(
-                      // 블로그
-                      color: Palette.textColor1,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  weekendStyle: TextStyle(
-                      // 블로그
-                      color: Colors.redAccent,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                  weekdayStyle: TextStyle(color: Colors.white)
                 ),
                 builders: CalendarBuilders(
+                  weekendDayBuilder: (context, date, events) => Container(
+                      margin: const EdgeInsets.all(4.0),
+                      alignment: Alignment.center,
+                      child: Text(
+                        date.day.toString(),
+                        style: TextStyle(
+                          color:Colors.red,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  dayBuilder: (context, date, events) => Container(
+                      margin: const EdgeInsets.all(4.0),
+                      alignment: Alignment.center,
+                      child: Text(
+                        date.day.toString(),
+                        style: TextStyle(
+                          color: Palette.textColor1,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
                     todayDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
@@ -214,8 +225,7 @@ class _MyClipState extends State<MyClip> {
                           date.day.toString(),
                           style: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'gom_KR',
-                            fontSize: 21,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -229,30 +239,29 @@ class _MyClipState extends State<MyClip> {
                           date.day.toString(),
                           style: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'gom_KR',
-                            fontSize: 21,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
-                    markersBuilder: (context, date, events, holiday) {
-                      dateTime = date;
-                      if (events.isNotEmpty) {
-                        return [
-                          Container(
-                            width: 10,
-                            height: 10,
-                            color: Colors.redAccent,
-                          )
-                        ];
-                      } else {
-                        return [Container()];
-                      }
-                    }),
+                  markersBuilder: (context, date, events, holiday) {
+                    if (events.isNotEmpty) {
+                      return [
+                        Container(
+                          width: 40,
+                          height: 16,
+                          color: colorBox[allPicks.first.color],
+                          child: Text("${allPicks.length}"),
+                        )
+                      ];
+                    } else {
+                      return [Container()];
+                    }
+                  }),
+
                 onDaySelected: (date, events, holidays) {
-                  dateTime = date;
+                   dateTime = date;
                 },
                 initialCalendarFormat: CalendarFormat.twoWeeks,
-                availableCalendarFormats: {CalendarFormat.twoWeeks: ""},
                 headerStyle: HeaderStyle(
                   centerHeaderTitle: true,
                   titleTextStyle: TextStyle(
@@ -270,8 +279,6 @@ class _MyClipState extends State<MyClip> {
             } else if (index == 1) {
               getHistories();
               return Container(child: getStudy());
-            } else if (index == 2) {
-              return Container();
             }
             return Container();
           }),
@@ -346,6 +353,7 @@ class _MyClipState extends State<MyClip> {
                                         MaterialPageRoute(
                                             builder: (ctx) => StudyAddPage(
                                                 pick: picks[idx])));
+                                    Navigator.of(context).pop();
                                   },
                                   child: Text("수정하기",
                                       style: TextStyle(
@@ -453,14 +461,91 @@ class _MyClipState extends State<MyClip> {
             } else if (idx == 2) {
               Widget growImages = GetLength().getStudyLgt(allPicks.length);
               return Container(child: growImages);
-            } else if (idx == 3) {
+            }else if(idx == 3){
+              List<FlSpot> spots = [];
+              for (final w in allPicks) {
+                if (chartIndex == 0) {
+                  //공부시간
+                  spots.add(FlSpot(w.date.toDouble(), w.studyTime.toDouble()));}
+              }
               return Container(
-                  margin: EdgeInsets.only(left: 150, top: 30),
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              chartIndex = 0;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0,top: 20),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  color: Palette.chartColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: Text(
+                                  "공부 시간 그래프",
+                                  style: TextStyle(
+                                      color: Colors.black),
+                                )),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 16),
+                      decoration: BoxDecoration(
+                          color: Palette.chartColor,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 4, spreadRadius: 4, color: Colors.black12)
+                          ]),
+                      height: 300,width: 400,
+                      child: spots.isEmpty?Container():LineChart(
+                          LineChartData(
+                              lineBarsData: [
+                                //각 항목에 대한 데이터가 들어가는 곳
+                                LineChartBarData(spots: spots, colors: [Palette.chartLineColor])
+                              ],
+                              gridData: FlGridData(show: false),
+                              borderData: FlBorderData(show: false),
+                              lineTouchData: LineTouchData(touchTooltipData:
+                              LineTouchTooltipData(getTooltipItems: (spots) {
+                                return [
+                                  LineTooltipItem("${spots.first.y}분",
+                                      TextStyle(color: Colors.black,fontSize: 20))
+                                ];
+                              })),
+                              titlesData: FlTitlesData(
+                                  bottomTitles: SideTitles(
+                                      showTitles: true,
+                                      //하단 아래에 날짜표시
+                                      getTitles: (value) {
+                                        DateTime date = Utils.stringToDateTime(
+                                            value.toInt().toString());
+                                        return "${date.day}일";
+                                      }),
+                                  leftTitles: SideTitles(showTitles: false)))),
+                    )
+                  ],
+                ),
+              );
+            } else if (idx == 4) {
+              return Container(
+                  margin: EdgeInsets.only(left: 150, top: 20),
                   child: Text(
                     "공부 분석",
                     style: TextStyle(fontSize: 25, color: Palette.textColor1),
                   ));
-            } else if (idx == 4) {
+            } else if (idx == 5) {
               return Container(
                 margin: const EdgeInsets.only(left: 30, top: 15),
                 child: Stack(
@@ -512,21 +597,21 @@ class _MyClipState extends State<MyClip> {
                   ],
                 ),
               );
-            } else if (idx == 5) {
+            } else if (idx == 6) {
               return Container(
                   margin: EdgeInsets.only(left: 150, top: 10),
                   child: Text(
                     "공부 강도",
                     style: TextStyle(fontSize: 25, color: Palette.textColor1),
                   ));
-            } else if (idx == 6) {
+            } else if (idx == 7) {
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 child: Stack(
                   children: [
                     Container(
                       width: 350,
-                      height: 200,
+                      height: 150,
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(30)),
@@ -535,7 +620,7 @@ class _MyClipState extends State<MyClip> {
                       children: [
                         Container(
                             margin: EdgeInsets.only(top: 10),
-                            height: 200,
+                            height: 150,
                             child: ListView.separated(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -571,83 +656,6 @@ class _MyClipState extends State<MyClip> {
                   ],
                 ),
               );
-            }else if(idx == 7){
-              List<FlSpot> spots = [];
-              for (final w in allPicks) {
-                if (chartIndex == 0) {
-                  //몸무게
-                  spots.add(FlSpot(w.date.toDouble(), w.studyTime.toDouble()));}
-              }
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            setState(() {
-                              chartIndex = 0;
-                            });
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: chartIndex == 0 ? Palette.chartColor : Palette.unchartColor,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 6),
-                              child: Text(
-                                "운동시간",
-                                style: TextStyle(
-                                    color: chartIndex == 0
-                                        ? Palette.chartColor : Palette.unchartColor),
-                              )),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 16),
-                      decoration: BoxDecoration(
-                          color: Palette.chartColor,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 4,
-                                spreadRadius: 4,
-                                color: Colors.black12)
-                          ]),
-                      height: 200,
-                      child: spots.isEmpty?Container():LineChart(
-                          LineChartData(
-                              lineBarsData: [
-                                //각 항목에 대한 데이터가 들어가는 곳
-                                LineChartBarData(spots: spots, colors: [Palette.chartColor])
-                              ],
-                              gridData: FlGridData(show: false),
-                              borderData: FlBorderData(show: false),
-                              lineTouchData: LineTouchData(touchTooltipData:
-                              LineTouchTooltipData(getTooltipItems: (spots) {
-                                return [
-                                  LineTooltipItem("${spots.first.y}",
-                                      TextStyle(color: Palette.chartColor))
-                                ];
-                              })),
-                              titlesData: FlTitlesData(
-                                  bottomTitles: SideTitles(
-                                      showTitles: true,
-                                      //하단 아래에 날짜표시
-                                      getTitles: (value) {
-                                        DateTime date = Utils.stringToDateTime(
-                                            value.toInt().toString());
-                                        return "${date.day}일";
-                                      }),
-                                  leftTitles: SideTitles(showTitles: false)))),
-                    )
-                  ],
-                ),
-              );
             }
             return Container();
           }),
@@ -674,7 +682,20 @@ class _MyClipState extends State<MyClip> {
                 children: List.generate(
                   allPicks.length,
                   (index) {
-                    return Container(
+                    return allPicks.isEmpty?Container(
+                      //margin: const EdgeInsets.only(left: 100, top: 250),
+                        height: 500,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text("아직 작성한 기록이 없어요",
+                                style: TextStyle(color: Colors.white, fontSize: 18)),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],)
+                    ): Container(
                       child: InkWell(
                         child: GetAllStudyCard(
                           pick: allPicks[index],
