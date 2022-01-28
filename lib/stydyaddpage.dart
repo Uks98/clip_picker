@@ -62,11 +62,10 @@ class _StudyAddPageState extends State<StudyAddPage> {
                         int.tryParse(studyTimeController.text) ?? 0;
                   }
                   await db.insertPick(pick);
-                 InAppReview.instance.requestReview();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
-                child: Text("저장"))
+                child: Text("저장하기",style: TextStyle(color: Palette.textColor1),))
           ],
           backgroundColor: Palette.backgroundColor,
           elevation: 0,
@@ -602,7 +601,7 @@ class StudyCard extends StatelessWidget {
                   pick.memo.isEmpty
                       ? Container()
                       : Container(
-                          width: 200,
+                          width: 230,
                           child: Text(
                             pick.memo.toString(),
                             style: TextStyle(
@@ -666,7 +665,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
           Center(
               child: Container(
                   child: Container(
-            margin: EdgeInsets.all(10),
+            margin:const EdgeInsets.only(left: 20,right: 20,bottom: 20),
             child: Card(
               color: colorBox[widget.pick.color],
               elevation: 1,
@@ -778,7 +777,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                               ),
                             )),
                     Container(
-                        margin: const EdgeInsets.only(left: 240, bottom: 10),
+                        margin: const EdgeInsets.only(left: 200, bottom: 15),
                         child: Text(
                           "${Utils.numToDateTime2(widget.pick.date)}".replaceAll('00:00:00.000', ""),
                           style: TextStyle(

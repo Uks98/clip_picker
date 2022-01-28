@@ -1,6 +1,7 @@
 import 'package:clip_picker/style/color_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 import 'data/list_box.dart';
@@ -20,6 +21,10 @@ class ShowDetail extends StatelessWidget {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       appBar: AppBar(
+        leading: IconButton(onPressed: (){
+          Navigator.of(context).pop();
+          InAppReview.instance.requestReview();
+        }, icon: Icon(Icons.clear)),
         elevation: 0.0,
         backgroundColor: Palette.backgroundColor,
         title: Text(""),

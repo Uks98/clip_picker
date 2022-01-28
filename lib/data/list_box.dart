@@ -8,14 +8,14 @@ List<String> studyType = [
   "국어",
   "영어",
   "수학",
-  "비문학",
   "자격증",
-  "토익",
-  "코딩",
   "독서",
+  "토익",
+  "컴퓨터",
+  "비문학",
   "기타"
 ];
-List<String> studyHard = ["가볍게", "보통", "열심히", "빡세게"];
+List<String> studyHard = ["가볍게", "적당히", "보통", "열심히"];
 List<Color> colorBox = [
   Palette.listPick,
   Palette.listPick1,
@@ -36,7 +36,7 @@ class GetLength {
           children: [
             Center(
               child: Container(
-                width: 380,
+                width: 400,
                 height: 150,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -85,7 +85,7 @@ class GetLength {
           children: [
             Center(
               child: Container(
-                width: 380,
+                width: 400,
                 height: 150,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -134,7 +134,7 @@ class GetLength {
           children: [
             Center(
               child: Container(
-                width: 380,
+                width: 400,
                 height: 150,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),

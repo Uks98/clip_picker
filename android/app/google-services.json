@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "393345225006",
+    "project_id": "studypicker-5dcae",
+    "storage_bucket": "studypicker-5dcae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393345225006:android:92b27df679dfc3eb176abf",
+        "android_client_info": {
+          "package_name": "com.example.clip_picker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393345225006-eieu52s7vhokidsjoqarvblfl1gdpf52.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuUlTobzdL-8KmmsWkeXIb5qR1WDNJ_R4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393345225006-eieu52s7vhokidsjoqarvblfl1gdpf52.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,6 +15,7 @@ class Palette{
   static const chartColor = Color(0xfff8f9fa);
   static const unchartColor = Color(0xffcdb4db);
   static const chartLineColor = Color(0xff9c6644);
+  static const calendarMarkerColor = Color(0xffffca3a);
 
 
   static const listPick = Color(0xffe6ccb2);

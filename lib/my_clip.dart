@@ -5,11 +5,11 @@ import 'package:clip_picker/setting.dart';
 import 'package:clip_picker/show_detail.dart';
 import 'package:clip_picker/stydyaddpage.dart';
 import 'package:clip_picker/style/color_style.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-
 import 'data/database.dart';
 
 class MyClip extends StatefulWidget {
@@ -20,32 +20,35 @@ class MyClip extends StatefulWidget {
 }
 
 class _MyClipState extends State<MyClip> {
+  FirebaseAnalytics analytics = FirebaseAnalytics();
+
   final dbHelper = DatabaseHelper.instance;
   CalendarController calendarController = CalendarController();
   int currentIndex = 0;
   int chartIndex = 0;
   DateTime dateTime = DateTime.now();
-  DateTime _date;
-  Map<DateTime, List<dynamic>> _events = {};
+  final Map<DateTime, List<dynamic>> _events = {};
   List<Pick> picks = [];
   List<Pick> allPicks = [];
   List<Pick> dataPicks = [];
   List<Pick> events = [];
   int _d;
+  DateTime date;
 
   void getHistories() async {
     _d = Utils.getFormatTime(dateTime);
     picks = await dbHelper.queryPickByDate(_d);
     setState(() {});
+    analytics.setUserProperty(name: "sex", value: "남자");
+    analytics.setUserProperty(value: "여자", name: "sex");
   }
 
- //void getPicks(){
- //  DateTime date;
- //  for(final picker in allPicks){
- //   date = Utils.numToDateTime2(picker.date);
- //    _events[date] = [picker];
- //  }
- // }
+  void getPicks() {
+    for (final picker in allPicks) {
+      date = Utils.numToDateTime2(picker.date);
+      _events[date] = [picker];
+    }
+  }
 
   void getAllStudy() async {
     allPicks = await dbHelper.queryAllPick();
@@ -77,16 +80,16 @@ class _MyClipState extends State<MyClip> {
           items: [
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.calendar_today,
+                  Icons.calendar_today_outlined,
                   color: Palette.textColor,
                 ),
                 label: "기록"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.bar_chart, color: Palette.textColor1),
+                icon: Icon(Icons.padding, color: Palette.textColor1),
                 label: "전체보기"),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.calendar_today,
+                  Icons.bar_chart,
                   color: Palette.textColor,
                 ),
                 label: "통계"),
@@ -105,11 +108,11 @@ class _MyClipState extends State<MyClip> {
           selectedLabelStyle:
               TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
           selectedItemColor: Palette.textColor,
-          unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-           unselectedItemColor: Colors.grey[600],
+          unselectedLabelStyle:
+              TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+          unselectedItemColor: Colors.grey[600],
         ),
         backgroundColor: Palette.backgroundColor,
-
         floatingActionButton: [0].contains(currentIndex)
             ? FloatingActionButton(
                 backgroundColor: Palette.floatingColor,
@@ -149,7 +152,9 @@ class _MyClipState extends State<MyClip> {
                                   )),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>Setting()));
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          Setting()));
                                 },
                                 child: Text("설정",
                                     style: TextStyle(
@@ -179,42 +184,36 @@ class _MyClipState extends State<MyClip> {
       child: ListView.builder(
           itemCount: 3,
           itemBuilder: (context, index) {
+            getPicks();
             if (index == 0) {
-              DateTime date;
-              Map<DateTime, List<dynamic>> _events = {};
-              for(final picker in allPicks){
-                date = Utils.numToDateTime2(picker.date);
-                _events[date] = [picker];
-              }
               return TableCalendar(
-                 events: _events,
+                events: _events,
                 locale: 'ko-KR',
-                calendarStyle: CalendarStyle(
-                  weekdayStyle: TextStyle(color: Colors.white)
-                ),
+                calendarStyle:
+                    CalendarStyle(weekdayStyle: TextStyle(color: Colors.white)),
                 builders: CalendarBuilders(
-                  weekendDayBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(
-                          color:Colors.red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                  dayBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(
-                          color: Palette.textColor1,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
+                    weekendDayBuilder: (context, date, events) => Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          date.day.toString(),
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                    dayBuilder: (context, date, events) => Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          date.day.toString(),
+                          style: TextStyle(
+                            color: Palette.textColor1,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
                     todayDayBuilder: (context, date, events) => Container(
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
@@ -243,23 +242,21 @@ class _MyClipState extends State<MyClip> {
                             fontWeight: FontWeight.bold,
                           ),
                         )),
-                  markersBuilder: (context, date, events, holiday) {
-                    if (events.isNotEmpty) {
-                      return [
-                        Container(
-                          width: 40,
-                          height: 16,
-                          color: colorBox[allPicks.first.color],
-                          child: Text("${allPicks.length}"),
-                        )
-                      ];
-                    } else {
-                      return [Container()];
-                    }
-                  }),
-
+                    markersBuilder: (context, date, events, holiday) {
+                      if (events.isNotEmpty) {
+                        return [
+                          Container(
+                            width: 13,
+                            height: 3,
+                            color: Palette.calendarMarkerColor,
+                          ),
+                        ];
+                      } else {
+                        return [Container()];
+                      }
+                    }),
                 onDaySelected: (date, events, holidays) {
-                   dateTime = date;
+                  dateTime = date;
                 },
                 initialCalendarFormat: CalendarFormat.twoWeeks,
                 headerStyle: HeaderStyle(
@@ -300,9 +297,9 @@ class _MyClipState extends State<MyClip> {
                 height: 10,
               ),
               Text("+ 를 눌러 오늘의 공부를 기록하세요",
-              style: TextStyle(color: Colors.white, fontSize: 18))
-            ],)
-          );
+                  style: TextStyle(color: Colors.white, fontSize: 18))
+            ],
+          ));
     }
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, top: 20),
@@ -348,12 +345,12 @@ class _MyClipState extends State<MyClip> {
                                           color: Palette.backgroundColor),
                                     )),
                                 TextButton(
-                                  onPressed: () async {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
                                             builder: (ctx) => StudyAddPage(
-                                                pick: picks[idx])));
-                                    Navigator.of(context).pop();
+                                                  pick: picks[idx],
+                                                )));
                                   },
                                   child: Text("수정하기",
                                       style: TextStyle(
@@ -366,7 +363,9 @@ class _MyClipState extends State<MyClip> {
                                         builder: (context) {
                                           return AlertDialog(
                                             shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10.0)),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0)),
                                             title: Text("삭제"),
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
@@ -384,25 +383,32 @@ class _MyClipState extends State<MyClip> {
                                                               .center,
                                                       children: [
                                                         TextButton(
-                                                            onPressed: () {
-                                                              getDelete(picks[idx].id);
-                                                              getHistories();
-                                                              setState(() {});
-                                                              Navigator.of(context).pop();
-                                                              Navigator.of(context).pop();
-                                                            },
-                                                            child: Text(
-                                                              '삭제하기',
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight.bold,
-                                                                  color: Colors.redAccent),
-                                                            ),),
+                                                          onPressed: () {
+                                                            getDelete(picks[idx].id);
+                                                            getHistories();
+                                                            setState(() {});
+                                                            Navigator.of(context).pop();
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: Text(
+                                                            '삭제하기',
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .redAccent),
+                                                          ),
+                                                        ),
                                                         TextButton(
                                                           onPressed: () {
-                                                            Navigator.of(context).pop();
-                                                            Navigator.of(context).pop();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
                                                           },
                                                           child: Text(
                                                             '취소',
@@ -461,12 +467,13 @@ class _MyClipState extends State<MyClip> {
             } else if (idx == 2) {
               Widget growImages = GetLength().getStudyLgt(allPicks.length);
               return Container(child: growImages);
-            }else if(idx == 3){
+            } else if (idx == 3) {
               List<FlSpot> spots = [];
               for (final w in allPicks) {
                 if (chartIndex == 0) {
                   //공부시간
-                  spots.add(FlSpot(w.date.toDouble(), w.studyTime.toDouble()));}
+                  spots.add(FlSpot(w.date.toDouble(), w.studyTime.toDouble()));
+                }
               }
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -481,7 +488,7 @@ class _MyClipState extends State<MyClip> {
                             });
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 20.0,top: 20),
+                            padding: const EdgeInsets.only(left: 20.0, top: 20),
                             child: Container(
                                 decoration: BoxDecoration(
                                   color: Palette.chartColor,
@@ -491,37 +498,46 @@ class _MyClipState extends State<MyClip> {
                                     horizontal: 10, vertical: 10),
                                 child: Text(
                                   "공부 시간 그래프",
-                                  style: TextStyle(
-                                      color: Colors.black),
+                                  style: TextStyle(color: Colors.black),
                                 )),
                           ),
                         ),
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 16),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 25, vertical: 16),
                       decoration: BoxDecoration(
                           color: Palette.chartColor,
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: [
                             BoxShadow(
-                                blurRadius: 4, spreadRadius: 4, color: Colors.black12)
-                          ]),
-                      height: 300,width: 400,
-                      child: spots.isEmpty?Container():LineChart(
-                          LineChartData(
+                                blurRadius: 4,
+                                spreadRadius: 4,
+                                color: Colors.black12)]),
+                      height: 300,
+                      width: 400,
+                      child: spots.isEmpty
+                          ? Container()
+                          : LineChart(LineChartData(
                               lineBarsData: [
-                                //각 항목에 대한 데이터가 들어가는 곳
-                                LineChartBarData(spots: spots, colors: [Palette.chartLineColor])
-                              ],
+                                  //각 항목에 대한 데이터가 들어가는 곳
+                                  LineChartBarData(
+                                      spots: spots,
+                                      colors: [Palette.chartLineColor])
+                                ],
                               gridData: FlGridData(show: false),
                               borderData: FlBorderData(show: false),
                               lineTouchData: LineTouchData(touchTooltipData:
-                              LineTouchTooltipData(getTooltipItems: (spots) {
+                                  LineTouchTooltipData(
+                                      getTooltipItems: (spots) {
                                 return [
-                                  LineTooltipItem("${spots.first.y}분",
-                                      TextStyle(color: Colors.black,fontSize: 20))
+                                  LineTooltipItem(
+                                      "${spots.first.y}분",
+                                      TextStyle(
+                                          color: Colors.black, fontSize: 20))
                                 ];
                               })),
                               titlesData: FlTitlesData(
@@ -539,29 +555,23 @@ class _MyClipState extends State<MyClip> {
                 ),
               );
             } else if (idx == 4) {
-              return Container(
-                  margin: EdgeInsets.only(left: 150, top: 20),
-                  child: Text(
-                    "공부 분석",
-                    style: TextStyle(fontSize: 25, color: Palette.textColor1),
-                  ));
+              return Center(child: Text("공부 분석", style: TextStyle(fontSize: 25, color: Palette.textColor1),));
             } else if (idx == 5) {
               return Container(
-                margin: const EdgeInsets.only(left: 30, top: 15),
+                margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 child: Stack(
                   children: [
                     Container(
-                      width: 350,
                       height: 340,
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(30)),
                     ),
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                             margin: EdgeInsets.only(top: 10),
-                            height: 350,
                             child: ListView.separated(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -598,19 +608,18 @@ class _MyClipState extends State<MyClip> {
                 ),
               );
             } else if (idx == 6) {
-              return Container(
-                  margin: EdgeInsets.only(left: 150, top: 10),
-                  child: Text(
-                    "공부 강도",
-                    style: TextStyle(fontSize: 25, color: Palette.textColor1),
-                  ));
+              return Center(
+                child: Text(
+                  "공부 강도",
+                  style: TextStyle(fontSize: 25, color: Palette.textColor1),
+                ),
+              );
             } else if (idx == 7) {
               return Container(
-                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                margin: const EdgeInsets.symmetric(vertical: 20, horizontal:40),
                 child: Stack(
                   children: [
                     Container(
-                      width: 350,
                       height: 150,
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
@@ -620,7 +629,6 @@ class _MyClipState extends State<MyClip> {
                       children: [
                         Container(
                             margin: EdgeInsets.only(top: 10),
-                            height: 150,
                             child: ListView.separated(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -682,27 +690,30 @@ class _MyClipState extends State<MyClip> {
                 children: List.generate(
                   allPicks.length,
                   (index) {
-                    return allPicks.isEmpty?Container(
-                      //margin: const EdgeInsets.only(left: 100, top: 250),
-                        height: 500,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text("아직 작성한 기록이 없어요",
-                                style: TextStyle(color: Colors.white, fontSize: 18)),
-                            SizedBox(
-                              height: 10,
+                    return allPicks.isEmpty
+                        ? Container(
+                            //margin: const EdgeInsets.only(left: 100, top: 250),
+                            height: 500,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("아직 작성한 기록이 없어요",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            ))
+                        : Container(
+                            child: InkWell(
+                              child: GetAllStudyCard(
+                                pick: allPicks[index],
+                                index: index,
+                              ),
                             ),
-                          ],)
-                    ): Container(
-                      child: InkWell(
-                        child: GetAllStudyCard(
-                          pick: allPicks[index],
-                          index: index,
-                        ),
-                      ),
-                    );
+                          );
                   },
                 ),
               ));
