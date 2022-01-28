@@ -84,7 +84,7 @@ class ShowDetail extends StatelessWidget {
               }else if(index ==3 ){
                 return Container(
                   margin: EdgeInsets.only(left: 25,top: 15,right: 20),
-                  child: Text("공부시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(pick.studyTime  % 60).toString()}분",
+                  child: Text("공부시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}시간 ${Utils.makeTwoDigit(pick.studyTime  % 60).toString()}분",
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 );

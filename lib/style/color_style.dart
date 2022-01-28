@@ -20,10 +20,10 @@ class Palette{
 
   static const listPick = Color(0xffe6ccb2);
   static const listPick1 = Color(0xffe9c46a);
-  static const listPick2 = Color(0xffe76f51);
+  static const listPick2 = Color(0xff4361ee);
   static const listPick3 = Color(0xffccd5ae);
   static const listPick4 = Color(0xff9c6644);
-  static const listPick5 = Color(0xff74c69d);
+  static const listPick5 = Color(0xffff6b6b);
   static const listPick6 = Color(0xff84a98c);
   static const listPick7 = Color(0xff495057);
 }

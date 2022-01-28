@@ -548,7 +548,7 @@ class StudyCard extends StatelessWidget {
                     height: 15,
                   ),
                   Text(
-                    "공부 시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(pick.studyTime % 60)}분"
+                    "공부 시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}시간 ${Utils.makeTwoDigit(pick.studyTime % 60)}분"
                         .toString(),
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
@@ -697,7 +697,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                       height: 15,
                     ),
                     Text(
-                      "공부 시간 · ${Utils.makeTwoDigit(widget.pick.studyTime ~/ 60)}:${Utils.makeTwoDigit(widget.pick.studyTime % 60)}분"
+                      "공부 시간 · ${Utils.makeTwoDigit(widget.pick.studyTime ~/ 60)}시간 ${Utils.makeTwoDigit(widget.pick.studyTime % 60)}분"
                           .toString(),
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
@@ -777,11 +777,11 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                               ),
                             )),
                     Container(
-                        margin: const EdgeInsets.only(left: 200, bottom: 15),
+                        margin: const EdgeInsets.only(left: 0, bottom: 15),
                         child: Text(
                           "${Utils.numToDateTime2(widget.pick.date)}".replaceAll('00:00:00.000', ""),
                           style: TextStyle(
-                              fontSize: 16, color: Palette.textColor1),
+                              fontSize: 16, color: Colors.grey[400]),
                         ),)
                   ],
                 ),

@@ -59,7 +59,7 @@ class _SettingState extends State<Setting> {
           ),
 
           ListTile(
-              trailing: Icon(Icons.arrow_drop_up_rounded),
+              trailing: Icon(Icons.arrow_drop_down),
               onTap: (){
              //   Get.to(
              //       IntroductionScreen(
@@ -92,37 +92,34 @@ class _SettingState extends State<Setting> {
                 '설명서',
                 style: TextStyle(
                     fontSize: 16,
-                    fontFamily: 'gom_KR',
                     fontWeight: FontWeight.bold
                 ),
               )),
-          Padding(
-            padding: EdgeInsets.only(
-                left: 10,
-                right: 10
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '야간모드',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'gom_KR',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CupertinoSwitch(value: isSwitched, onChanged: (value){
-                  setState(() {
-                  });
-                }),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ), ListTile(
-              trailing: Icon(Icons.arrow_drop_up_rounded),
+          //Padding(
+          //  padding: EdgeInsets.only(
+          //      left: 10,
+          //      right: 10
+          //  ),
+          //  child: Row(
+          //    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //    children: [
+          //      Text(
+          //        '야간모드',
+          //        style: TextStyle(
+          //          fontSize: 18,
+          //          fontFamily: 'gom_KR',
+          //          fontWeight: FontWeight.bold,
+          //        ),
+          //      ),
+          //      CupertinoSwitch(value: isSwitched, onChanged: (value){
+          //        setState(() {
+          //        });
+          //      }),
+          //    ],
+          //  ),
+          //),
+           ListTile(
+              trailing: Icon(Icons.arrow_drop_down),
               onTap: _sendEmail,
               title: Text(
                 '의견 전달하기',
@@ -136,7 +133,7 @@ class _SettingState extends State<Setting> {
             height: 10,
           ),
           ListTile(
-              trailing: Icon(Icons.arrow_drop_up_rounded),
+              trailing: Icon(Icons.arrow_drop_down),
               onTap: (){
                 //Get.to(Licence());
               },
@@ -149,7 +146,7 @@ class _SettingState extends State<Setting> {
                 ),
               )),
           ListTile(
-              trailing: Icon(Icons.arrow_drop_up_rounded),
+              trailing: Icon(Icons.arrow_drop_down),
               onTap: _qmail,
               title: Text(
                 '질문 보내기',
@@ -161,7 +158,7 @@ class _SettingState extends State<Setting> {
               )),
           Padding(
             padding: EdgeInsets.only(
-              left:10,
+              left:20,
             ),
             child: Text(
               '정보',
@@ -176,7 +173,7 @@ class _SettingState extends State<Setting> {
             height: 10,
           ),
           ListTile(
-              trailing: Icon(Icons.arrow_drop_up_rounded),
+              trailing: Icon(Icons.arrow_drop_down),
               onTap: () {
                 InAppReview.instance.requestReview();},
               title: Text(
@@ -191,7 +188,7 @@ class _SettingState extends State<Setting> {
             height: 10,
           ),
           ListTile(
-              trailing: Icon(Icons.arrow_drop_up_rounded),
+              trailing: Icon(Icons.arrow_drop_down),
               onTap: (){},
               title: Text(
                 '어플리케이션 정보',
@@ -202,7 +199,7 @@ class _SettingState extends State<Setting> {
                 ),
               )),
           ListTile(
-              trailing: Icon(Icons.arrow_drop_up_rounded),
+              trailing: Icon(Icons.arrow_drop_down),
               onTap: (){
               },
               title: Text(
