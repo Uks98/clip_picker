@@ -36,7 +36,7 @@ class GetLength {
           children: [
             Center(
               child: Container(
-                width: 400,
+                width: 390,
                 height: 150,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),

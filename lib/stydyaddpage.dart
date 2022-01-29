@@ -601,7 +601,7 @@ class StudyCard extends StatelessWidget {
                   pick.memo.isEmpty
                       ? Container()
                       : Container(
-                          width: 230,
+                          width: 240,
                           child: Text(
                             pick.memo.toString(),
                             style: TextStyle(
@@ -777,7 +777,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                               ),
                             )),
                     Container(
-                        margin: const EdgeInsets.only(left: 0, bottom: 15),
+                        margin: const EdgeInsets.only(left: 0, bottom: 10,top: 10),
                         child: Text(
                           "${Utils.numToDateTime2(widget.pick.date)}".replaceAll('00:00:00.000', ""),
                           style: TextStyle(

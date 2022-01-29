@@ -1,4 +1,4 @@
-package com.example.clip_picker
+package com.young.clip_picker
 
 import io.flutter.embedding.android.FlutterActivity
 

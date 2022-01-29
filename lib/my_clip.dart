@@ -116,7 +116,7 @@ class _MyClipState extends State<MyClip> {
         floatingActionButton: [0].contains(currentIndex)
             ? FloatingActionButton(
                 backgroundColor: Palette.floatingColor,
-                child: Icon(Icons.add),
+                child: Icon(Icons.add,color: Colors.grey[800],),
                 onPressed: () {
                   showModalBottomSheet(
                       context: context,
@@ -285,11 +285,9 @@ class _MyClipState extends State<MyClip> {
   Widget getStudy() {
     if (picks.isEmpty) {
       return Container(
-          //margin: const EdgeInsets.only(left: 100, top: 250),
-          height: 500,
+          margin: const EdgeInsets.only(top: 170),
+          height: 300,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("아직 작성한 기록이 없어요",
                   style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -466,8 +464,10 @@ class _MyClipState extends State<MyClip> {
               );
             } else if (idx == 2) {
               Widget growImages = GetLength().getStudyLgt(allPicks.length);
+
               return Container(child: growImages);
             } else if (idx == 3) {
+
               List<FlSpot> spots = [];
               for (final w in allPicks) {
                 if (chartIndex == 0) {

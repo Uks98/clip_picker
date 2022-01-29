@@ -104,7 +104,7 @@ class ShowDetail extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: Text(
-                              studyHard[picks.hardStudy],
+                              studyType[picks.studyType],
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
@@ -122,7 +122,7 @@ class ShowDetail extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: Text(
-                              studyType[picks.studyType],
+                              studyHard[picks.hardStudy],
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
