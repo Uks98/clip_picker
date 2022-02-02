@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:clip_picker/data/database.dart';
@@ -8,8 +9,8 @@ import 'package:clip_picker/style/color_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'data/pick_class.dart';
 
 class StudyAddPage extends StatefulWidget {
@@ -23,7 +24,8 @@ class StudyAddPage extends StatefulWidget {
 
 class _StudyAddPageState extends State<StudyAddPage> {
   DateTime dateTime = DateTime.now();
-
+  final getRewordId = "ca-app-pub-4051456724877953/9282938009";
+  InterstitialAd interstitialAd;
   Pick get pick => widget.pick;
   TextEditingController titleController = TextEditingController();
   TextEditingController memoController = TextEditingController();
@@ -38,6 +40,13 @@ class _StudyAddPageState extends State<StudyAddPage> {
     titleController.text = pick.name;
     memoController.text = pick.memo;
     studyTimeController.text = pick.studyTime.toString();
+    interstitialAd = InterstitialAd(
+      listener: AdListener(onAdClosed: (ad){
+        ad.dispose();
+      }),
+        adUnitId: getRewordId,
+        request: AdRequest(),
+    )..load();
   }
 
   @override
@@ -58,11 +67,12 @@ class _StudyAddPageState extends State<StudyAddPage> {
                   if (studyTimeController.text.isEmpty) {
                     pick.studyTime = 0;
                   } else {
-                    pick.studyTime =
-                        int.tryParse(studyTimeController.text) ?? 0;
+                    pick.studyTime = int.tryParse(studyTimeController.text) ?? 0;
                   }
                   await db.insertPick(pick);
-                  Navigator.of(context).pop();
+                  if(pick.image.isNotEmpty){
+                   interstitialAd.show();
+                  }
                   Navigator.of(context).pop();
                 },
                 child: Text("저장하기",style: TextStyle(color: Palette.textColor1),))
@@ -452,7 +462,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                             width: 130,
                             height: 130,
                             child: InkWell(
-                              onTap: () {
+                              onTap: (){
                                 selectImage();
                               },
                               child: AspectRatio(
@@ -493,15 +503,17 @@ class _StudyAddPageState extends State<StudyAddPage> {
   }
 
   Future<void> selectImage() async {
-    final _img =
-        await MultiImagePicker.pickImages(maxImages: 1, enableCamera: true);
-    if (_img.isEmpty) {
-      return Container();
+    final _img = await MultiImagePicker.pickImages(maxImages: 1, enableCamera: true);
+    if (_img.isNotEmpty) {
+      setState(() {
+        pick.image = _img.first.identifier;
+      });
+    }else{
+      return;
     }
-    setState(() {
-      pick.image = _img.first.identifier;
-    });
   }
+
+
 }
 
 class StudyCard extends StatelessWidget {

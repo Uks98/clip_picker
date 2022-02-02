@@ -1,3 +1,6 @@
+//import 'package:admob_flutter/admob_flutter.dart';
+import 'dart:math';
+
 import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/pick_class.dart';
 import 'package:clip_picker/data/utils.dart';
@@ -5,12 +8,14 @@ import 'package:clip_picker/setting.dart';
 import 'package:clip_picker/show_detail.dart';
 import 'package:clip_picker/stydyaddpage.dart';
 import 'package:clip_picker/style/color_style.dart';
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'data/database.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class MyClip extends StatefulWidget {
   const MyClip({Key key}) : super(key: key);
@@ -20,6 +25,8 @@ class MyClip extends StatefulWidget {
 }
 
 class _MyClipState extends State<MyClip> {
+  BannerAd banner;
+  final addMobId = "ca-app-pub-4051456724877953/3768717446";
   FirebaseAnalytics analytics = FirebaseAnalytics();
 
   final dbHelper = DatabaseHelper.instance;
@@ -34,6 +41,32 @@ class _MyClipState extends State<MyClip> {
   List<Pick> events = [];
   int _d;
   DateTime date;
+
+  var s;
+  var g;
+  var latestTime;
+  List num;
+  List addNum;
+  int allTime;
+  int x = 0;
+  int findLatesTitle() {
+    for(final t in allPicks){
+      final l = t.date;
+      num = [l];
+      num.sort();
+      final m = num.first;
+      latestTime = Utils.numToDateTime2(m);
+    }
+  }
+
+  int allTimeAdd() {
+    for(final y in allPicks) {
+      g = y.studyTime;
+    }
+    addNum = [g];
+  }
+
+
 
   void getHistories() async {
     _d = Utils.getFormatTime(dateTime);
@@ -65,6 +98,12 @@ class _MyClipState extends State<MyClip> {
     super.initState();
     getHistories();
     getAllStudy();
+    banner = BannerAd(
+      listener: AdListener(),
+      size: AdSize.banner,
+      adUnitId: addMobId,
+      request: AdRequest(),
+    )..load();
   }
 
   @override
@@ -113,10 +152,14 @@ class _MyClipState extends State<MyClip> {
           unselectedItemColor: Colors.grey[600],
         ),
         backgroundColor: Palette.backgroundColor,
+
         floatingActionButton: [0].contains(currentIndex)
             ? FloatingActionButton(
                 backgroundColor: Palette.floatingColor,
-                child: Icon(Icons.add,color: Colors.grey[800],),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
                 onPressed: () {
                   showModalBottomSheet(
                       context: context,
@@ -131,8 +174,7 @@ class _MyClipState extends State<MyClip> {
                                         .push(MaterialPageRoute(
                                             builder: (ctx) => StudyAddPage(
                                                   pick: Pick(
-                                                    date: Utils.getFormatTime(
-                                                        dateTime),
+                                                    date: Utils.getFormatTime(dateTime),
                                                     name: "",
                                                     memo: "",
                                                     time: 0110,
@@ -149,7 +191,7 @@ class _MyClipState extends State<MyClip> {
                                     "공부 추가",
                                     style: TextStyle(
                                         color: Palette.backgroundColor),
-                                  )),
+                                  ).tr()),
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -158,7 +200,7 @@ class _MyClipState extends State<MyClip> {
                                 },
                                 child: Text("설정",
                                     style: TextStyle(
-                                        color: Palette.backgroundColor)),
+                                        color: Palette.backgroundColor)).tr(),
                               )
                             ],
                           ),
@@ -184,8 +226,8 @@ class _MyClipState extends State<MyClip> {
       child: ListView.builder(
           itemCount: 3,
           itemBuilder: (context, index) {
-            getPicks();
             if (index == 0) {
+              getPicks();
               return TableCalendar(
                 events: _events,
                 locale: 'ko-KR',
@@ -290,12 +332,12 @@ class _MyClipState extends State<MyClip> {
           child: Column(
             children: [
               Text("아직 작성한 기록이 없어요",
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+                  style: TextStyle(color: Colors.white, fontSize: 18)).tr(),
               SizedBox(
                 height: 10,
               ),
               Text("+ 를 눌러 오늘의 공부를 기록하세요",
-                  style: TextStyle(color: Colors.white, fontSize: 18))
+                  style: TextStyle(color: Colors.white, fontSize: 18)).tr()
             ],
           ));
     }
@@ -382,11 +424,16 @@ class _MyClipState extends State<MyClip> {
                                                       children: [
                                                         TextButton(
                                                           onPressed: () {
-                                                            getDelete(picks[idx].id);
+                                                            getDelete(
+                                                                picks[idx].id);
                                                             getHistories();
                                                             setState(() {});
-                                                            Navigator.of(context).pop();
-                                                            Navigator.of(context).pop();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
                                                           },
                                                           child: Text(
                                                             '삭제하기',
@@ -467,7 +514,6 @@ class _MyClipState extends State<MyClip> {
 
               return Container(child: growImages);
             } else if (idx == 3) {
-
               List<FlSpot> spots = [];
               for (final w in allPicks) {
                 if (chartIndex == 0) {
@@ -516,49 +562,63 @@ class _MyClipState extends State<MyClip> {
                             BoxShadow(
                                 blurRadius: 4,
                                 spreadRadius: 4,
-                                color: Colors.black12)]),
+                                color: Colors.black12)
+                          ]),
                       height: 300,
                       width: 400,
                       child: spots.isEmpty
                           ? Container()
-                          : LineChart(LineChartData(
+                          : LineChart(
+                          LineChartData(
                               lineBarsData: [
                                   //각 항목에 대한 데이터가 들어가는 곳
                                   LineChartBarData(
+                                    isCurved:true,
+                                      barWidth: 3.3,
                                       spots: spots,
-                                      colors: [Palette.chartLineColor])
+                                      belowBarData: BarAreaData(
+                                        show: true,
+                                        colors: [Palette.gradientColor.withOpacity(0.2)]
+                                      ),
+                                      colors: [Palette.chartLineColor]),
                                 ],
                               gridData: FlGridData(show: false),
                               borderData: FlBorderData(show: false),
-                              lineTouchData: LineTouchData(touchTooltipData:
+                              lineTouchData: LineTouchData(
+                                  touchTooltipData:
                                   LineTouchTooltipData(
                                       getTooltipItems: (spots) {
                                 return [
                                   LineTooltipItem(
-                                      "${spots.first.y}분",
+                                      "${Utils.doubleToDateTime2(spots.first.x)}\n${spots.first.y}분".replaceAll("00:00:00.000",""),
                                       TextStyle(
                                           color: Colors.black, fontSize: 20))
                                 ];
                               })),
                               titlesData: FlTitlesData(
                                   bottomTitles: SideTitles(
-                                      showTitles: true,
+                                      showTitles: false,
                                       //하단 아래에 날짜표시
                                       getTitles: (value) {
                                         DateTime date = Utils.stringToDateTime(
                                             value.toInt().toString());
                                         return "${date.day}일";
                                       }),
-                                  leftTitles: SideTitles(showTitles: false)))),
+                                  leftTitles: SideTitles(showTitles: false)),),),
                     )
                   ],
                 ),
               );
             } else if (idx == 4) {
-              return Center(child: Text("공부 분석", style: TextStyle(fontSize: 25, color: Palette.textColor1),));
+              return Center(
+                  child: Text(
+                "공부 분석",
+                style: TextStyle(fontSize: 25, color: Palette.textColor1),
+              ));
             } else if (idx == 5) {
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 child: Stack(
                   children: [
                     Container(
@@ -616,7 +676,8 @@ class _MyClipState extends State<MyClip> {
               );
             } else if (idx == 7) {
               return Container(
-                margin: const EdgeInsets.symmetric(vertical: 20, horizontal:40),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                 child: Stack(
                   children: [
                     Container(
@@ -664,6 +725,18 @@ class _MyClipState extends State<MyClip> {
                   ],
                 ),
               );
+            }else if(idx ==8){
+              findLatesTitle();
+              return Column(
+                children: [
+                  Container(
+                    child: Text("가장 최근에 등록한 기록 ${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),),
+                  ),
+                  Container(
+                    child: Text("지금껏 공부한 시간 ${x}분".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              );
             }
             return Container();
           }),
@@ -676,15 +749,24 @@ class _MyClipState extends State<MyClip> {
           itemBuilder: (ctx, idx) {
             if (idx == 0) {
               return Container(
+                  child: Container(
+                      width: 400,
+                      height: 70,
+                      child: this.banner == null
+                          ? Container()
+                          : AdWidget(ad: this.banner)));
+            }
+            if (idx == 1) {
+              return Container(
                 margin:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                    const EdgeInsets.symmetric(vertical:10,horizontal: 20),
                 child: Text(
                   "나의 공부 기록",
                   style: TextStyle(fontSize: 25, color: Palette.textColor1),
-                ),
+                ).tr(),
               );
             }
-            if (idx == 1) {
+            if (idx == 2) {
               return Container(
                   child: Column(
                 children: List.generate(

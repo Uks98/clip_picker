@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:clip_picker/data/pick_class.dart';
 import 'package:clip_picker/style/color_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ List<String> studyType = [
   "기타"
 ];
 List<String> studyHard = ["가볍게", "적당히", "보통", "열심히"];
+
 List<Color> colorBox = [
   Palette.listPick,
   Palette.listPick1,
@@ -26,6 +28,7 @@ List<Color> colorBox = [
   Palette.listPick6,
   Palette.listPick7
 ];
+
 
 class GetLength {
   Widget getStudyLgt(var let) {
