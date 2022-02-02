@@ -6,6 +6,7 @@ import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/utils.dart';
 import 'package:clip_picker/show_detail.dart';
 import 'package:clip_picker/style/color_style.dart';
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,7 +76,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                   }
                   Navigator.of(context).pop();
                 },
-                child: Text("저장하기",style: TextStyle(color: Palette.textColor1),))
+                child: Text("저장하기",style: TextStyle(color: Palette.textColor1),).tr())
           ],
           backgroundColor: Palette.backgroundColor,
           elevation: 0,
@@ -99,7 +100,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                           "공부 제목",
                           style: TextStyle(
                               color: Palette.textColor1, fontSize: 18),
-                        ),
+                        ).tr(),
                         Container(
                           child: TextField(
                             style: TextStyle(color: Palette.textColor1),
@@ -130,7 +131,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                           "공부 시간",
                           style: TextStyle(
                               color: Palette.textColor1, fontSize: 18),
-                        ),
+                        ).tr(),
                         Column(
                           children: [
                             SizedBox(
@@ -175,7 +176,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                     style: TextStyle(
                                         color: Palette.textColor1,
                                         fontSize: 18),
-                                  ),
+                                  ).tr(),
                                 )
                               ],
                             ),
@@ -198,7 +199,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                             "메모",
                             style: TextStyle(
                                 fontSize: 20, color: Palette.textColor1),
-                          ),
+                          ).tr(),
                         ),
                         Container(
                             margin: EdgeInsets.all(15),
@@ -257,7 +258,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                 "세부 사항",
                                 style: TextStyle(
                                     fontSize: 22, color: Palette.textColor1),
-                              ),
+                              ).tr(),
                             ],
                           ),
                         ],
@@ -276,7 +277,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                             "공부 종류",
                             style: TextStyle(
                                 fontSize: 16, color: Palette.textColor1),
-                          ),
+                          ).tr(),
                         ),
                         SizedBox(
                           height: 2,
@@ -334,7 +335,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                             "공부 강도",
                             style: TextStyle(
                                 fontSize: 16, color: Palette.textColor1),
-                          ),
+                          ).tr(),
                         ),
                         SizedBox(
                           height: 2,
@@ -390,7 +391,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                           "색상",
                           style: TextStyle(
                               fontSize: 18, color: Palette.textColor1),
-                        ),
+                        ).tr(),
                       ),
                       SizedBox(
                         height: 15,
@@ -448,10 +449,10 @@ class _StudyAddPageState extends State<StudyAddPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0, top: 10),
                           child: Text(
-                            "사진으로 기록남기기",
+                            "사진으로 기록하기",
                             style: TextStyle(
                                 color: Palette.textColor1, fontSize: 16),
-                          ),
+                          ).tr(),
                         ),
                         SizedBox(
                           height: 5,
@@ -478,7 +479,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                                             "사진 붙이기",
                                             style: TextStyle(
                                                 color: Palette.textColor1),
-                                          )),
+                                          ).tr()),
                                           width: 130,
                                           height: 130,
                                         )
@@ -544,7 +545,7 @@ class StudyCard extends StatelessWidget {
                               color: Palette.textColor1,
                               fontSize: 18,
                               letterSpacing: 0.3),
-                        )
+                        ).tr()
                       : Container(
                           child: Text(
                             "${pick.name}".toString(),
@@ -559,10 +560,14 @@ class StudyCard extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    "공부 시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}시간 ${Utils.makeTwoDigit(pick.studyTime % 60)}분"
-                        .toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  Row(
+                    children: [
+                      Text("공부 시간 · ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                      Text("${Utils.makeTwoDigit(pick.studyTime ~/ 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
+                      Text("시간 ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                      Text("${Utils.makeTwoDigit(pick.studyTime % 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
+                      Text("분", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                    ],
                   ),
                   SizedBox(
                     height: 15,
@@ -693,7 +698,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                                 color: Palette.textColor,
                                 fontSize: 18,
                                 letterSpacing: 0.3),
-                          )
+                          ).tr()
                         : Container(
                             child: Text(
                               "${widget.pick.name}".toString(),
@@ -708,10 +713,14 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                     SizedBox(
                       height: 15,
                     ),
-                    Text(
-                      "공부 시간 · ${Utils.makeTwoDigit(widget.pick.studyTime ~/ 60)}시간 ${Utils.makeTwoDigit(widget.pick.studyTime % 60)}분"
-                          .toString(),
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    Row(
+                      children: [
+                        Text("공부 시간 · ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                        Text("${Utils.makeTwoDigit(widget.pick.studyTime ~/ 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
+                        Text("시간 ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                        Text("${Utils.makeTwoDigit(widget.pick.studyTime % 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
+                        Text("분", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                      ],
                     ),
                     SizedBox(
                       height: 15,

@@ -1,4 +1,5 @@
 import 'package:clip_picker/style/color_style.dart';
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -72,7 +73,7 @@ class ShowDetail extends StatelessWidget {
                         "무제",
                         style: TextStyle(
                             fontSize: 20, color: Palette.textColor1),
-                      ):Text(
+                      ).tr():Text(
                         picks.name,
                         style: TextStyle(
                             fontSize: 20, color: Palette.textColor1),
@@ -83,8 +84,14 @@ class ShowDetail extends StatelessWidget {
               }else if(index ==3 ){
                 return Container(
                   margin: EdgeInsets.only(left: 25,top: 15,right: 20),
-                  child: Text("공부시간 · ${Utils.makeTwoDigit(pick.studyTime ~/ 60)}시간 ${Utils.makeTwoDigit(pick.studyTime  % 60).toString()}분",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  child: Row(
+                    children: [
+                      Text("공부 시간 · ", style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
+                      Text("${Utils.makeTwoDigit(pick.studyTime ~/ 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
+                      Text("시간 ", style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
+                      Text("${Utils.makeTwoDigit(pick.studyTime % 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
+                      Text("분", style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
+                    ],
                   ),
                 );
               }else if(index == 4){

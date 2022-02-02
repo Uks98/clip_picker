@@ -383,7 +383,7 @@ class _MyClipState extends State<MyClip> {
                                       "공부기록 상세보기",
                                       style: TextStyle(
                                           color: Palette.backgroundColor),
-                                    )),
+                                    ).tr()),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context)
@@ -394,7 +394,7 @@ class _MyClipState extends State<MyClip> {
                                   },
                                   child: Text("수정하기",
                                       style: TextStyle(
-                                          color: Palette.backgroundColor)),
+                                          color: Palette.backgroundColor)).tr(),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -406,7 +406,7 @@ class _MyClipState extends State<MyClip> {
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         10.0)),
-                                            title: Text("삭제"),
+                                            title: Text("삭제").tr(),
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               crossAxisAlignment:
@@ -414,7 +414,7 @@ class _MyClipState extends State<MyClip> {
                                               children: <Widget>[
                                                 Text(
                                                   "기록을 삭제 하시겠습니까?",
-                                                ),
+                                                ).tr(),
                                                 Row(
                                                   children: [
                                                     Row(
@@ -444,7 +444,7 @@ class _MyClipState extends State<MyClip> {
                                                                         .bold,
                                                                 color: Colors
                                                                     .redAccent),
-                                                          ),
+                                                          ).tr(),
                                                         ),
                                                         TextButton(
                                                           onPressed: () {
@@ -464,7 +464,7 @@ class _MyClipState extends State<MyClip> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold),
-                                                          ),
+                                                          ).tr(),
                                                         )
                                                       ],
                                                     )
@@ -477,7 +477,7 @@ class _MyClipState extends State<MyClip> {
                                   },
                                   child: Text("삭제하기",
                                       style:
-                                          TextStyle(color: Colors.redAccent)),
+                                          TextStyle(color: Colors.redAccent)).tr(),
                                 )
                               ],
                             ),
@@ -507,7 +507,7 @@ class _MyClipState extends State<MyClip> {
                 child: Text(
                   "통계",
                   style: TextStyle(fontSize: 30, color: Palette.textColor1),
-                ),
+                ).tr(),
               );
             } else if (idx == 2) {
               Widget growImages = GetLength().getStudyLgt(allPicks.length);
@@ -545,7 +545,7 @@ class _MyClipState extends State<MyClip> {
                                 child: Text(
                                   "공부 시간 그래프",
                                   style: TextStyle(color: Colors.black),
-                                )),
+                                ).tr()),
                           ),
                         ),
                       ],
@@ -614,7 +614,7 @@ class _MyClipState extends State<MyClip> {
                   child: Text(
                 "공부 분석",
                 style: TextStyle(fontSize: 25, color: Palette.textColor1),
-              ));
+              ).tr());
             } else if (idx == 5) {
               return Container(
                 margin:
@@ -622,7 +622,7 @@ class _MyClipState extends State<MyClip> {
                 child: Stack(
                   children: [
                     Container(
-                      height: 340,
+                      height: 300,
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(30)),
@@ -654,7 +654,7 @@ class _MyClipState extends State<MyClip> {
                                                 fontSize: 18,
                                                 color: Colors.grey[800])),
                                         Text(
-                                            "${allPicks.where((element) => element.studyType == index).length}개",
+                                            "${allPicks.where((element) => element.studyType == index).length}",
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.grey[800])),
@@ -672,7 +672,7 @@ class _MyClipState extends State<MyClip> {
                 child: Text(
                   "공부 강도",
                   style: TextStyle(fontSize: 25, color: Palette.textColor1),
-                ),
+                ).tr(),
               );
             } else if (idx == 7) {
               return Container(
@@ -712,7 +712,7 @@ class _MyClipState extends State<MyClip> {
                                                 fontSize: 16,
                                                 color: Colors.grey[800])),
                                         Text(
-                                            "${allPicks.where((element) => element.hardStudy == idx).length}개",
+                                            "${allPicks.where((element) => element.hardStudy == idx).length}",
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.grey[800])),
@@ -730,10 +730,10 @@ class _MyClipState extends State<MyClip> {
               return Column(
                 children: [
                   Container(
-                    child: Text("가장 최근에 등록한 기록 ${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),),
+                    child: Text("가장 최근 기록 ",style: TextStyle(color: Colors.white),).tr(),
                   ),
                   Container(
-                    child: Text("지금껏 공부한 시간 ${x}분".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),),
+                    child: Text("${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),).tr(),
                   ),
                 ],
               );

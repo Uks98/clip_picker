@@ -1,11 +1,9 @@
-import 'package:clip_picker/data/pick_class.dart';
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'data/database.dart';
-import 'data/pick_class.dart';
-import 'data/pick_class.dart';
 
 class Setting extends StatefulWidget {
   Setting({Key key}) : super(key: key);
@@ -38,7 +36,7 @@ class _SettingState extends State<Setting> {
               color:Colors.grey[700],
               fontWeight: FontWeight.bold
           ),
-        ),
+        ).tr(),
         backgroundColor: Colors.transparent,
       ),
       body: ListView(
@@ -94,7 +92,7 @@ class _SettingState extends State<Setting> {
                     fontSize: 16,
                     fontWeight: FontWeight.bold
                 ),
-              )),
+              ).tr()),
           //Padding(
           //  padding: EdgeInsets.only(
           //      left: 10,
@@ -128,7 +126,7 @@ class _SettingState extends State<Setting> {
                     fontFamily: 'gom_KR',
                     fontWeight: FontWeight.bold
                 ),
-              )),
+              ).tr()),
           SizedBox(
             height: 10,
           ),
@@ -144,7 +142,7 @@ class _SettingState extends State<Setting> {
                     fontFamily: 'gom_KR',
                     fontWeight: FontWeight.bold
                 ),
-              )),
+              ).tr()),
           ListTile(
               trailing: Icon(Icons.arrow_drop_down),
               onTap: _qmail,
@@ -155,7 +153,7 @@ class _SettingState extends State<Setting> {
                     fontFamily: 'gom_KR',
                     fontWeight: FontWeight.bold
                 ),
-              )),
+              ).tr()),
           Padding(
             padding: EdgeInsets.only(
               left:20,
@@ -167,7 +165,7 @@ class _SettingState extends State<Setting> {
                 fontFamily: 'gom_KR',
                 fontWeight: FontWeight.bold,
               ),
-            ),
+            ).tr(),
           ),
           SizedBox(
             height: 10,
@@ -183,7 +181,7 @@ class _SettingState extends State<Setting> {
                   fontWeight: FontWeight.bold,
                   fontFamily: 'gom_KR',
                 ),
-              )),
+              ).tr()),
           SizedBox(
             height: 10,
           ),
@@ -197,7 +195,7 @@ class _SettingState extends State<Setting> {
                     fontFamily: 'gom_KR',
                     fontWeight: FontWeight.bold
                 ),
-              )),
+              ).tr()),
           ListTile(
               trailing: Icon(Icons.arrow_drop_down),
               onTap: (){
@@ -209,7 +207,7 @@ class _SettingState extends State<Setting> {
                     fontFamily: 'gom_KR',
                     fontWeight: FontWeight.bold
                 ),
-              )),
+              ).tr()),
         ],
       ),
     );
