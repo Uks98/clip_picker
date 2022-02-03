@@ -28,6 +28,7 @@ List<Color> colorBox = [
   Palette.listPick6,
   Palette.listPick7
 ];
+List<String> bottomTitle = ["분".tr()];
 
 
 class GetLength {

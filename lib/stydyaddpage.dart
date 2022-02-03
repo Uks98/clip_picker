@@ -108,7 +108,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                             controller: titleController,
                             textAlign: TextAlign.start,
                             decoration: InputDecoration(
-                                hintText: "어떤 공부를 하셨나요?",
+                                hintText: "어떤 공부를 하셨나요?".tr(),
                                 hintStyle: TextStyle(
                                     fontSize: 18, color: Colors.grey[400]),
                                 border: UnderlineInputBorder(
@@ -558,7 +558,7 @@ class StudyCard extends StatelessWidget {
                           width: 200,
                         ),
                   SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -570,7 +570,7 @@ class StudyCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -613,7 +613,7 @@ class StudyCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   pick.memo.isEmpty
                       ? Container()
@@ -660,7 +660,6 @@ class StudyCard extends StatelessWidget {
 class GetAllStudyCard extends StatefulWidget {
   final Pick pick;
   int index;
-
   GetAllStudyCard({Key key, this.pick,this.index}) : super(key: key);
 
   @override
@@ -711,7 +710,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                             width: 400,
                           ),
                     SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
                     Row(
                       children: [
@@ -723,7 +722,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                       ],
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
                     Row(
                       children: [

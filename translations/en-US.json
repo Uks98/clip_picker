@@ -40,6 +40,7 @@
   "당신의 도전을 응원합니다.":"I support your challenge",
   "파릇파릇한 나무":"A green tree",
   "무제":"No title",
+  "어떤 공부를 하셨나요?" : "What did you study?",
 
   "공부 시간 · ": "StudyTime · ",
   "시간 ": "hour ",
@@ -60,5 +61,10 @@
   "정보": "Information",
   "개발자 칭찬하기": "Complimenting the developer",
   "어플리케이션 정보": "Application information",
-  "이용약관 및 개인정보취급방침": "Terms and conditions"
+  "이용약관 및 개인정보취급방침": "Terms and conditions",
+
+  "기록" : "Record",
+  "전체보기" : "View",
+  "통계" : "Statistics",
+  "분" : "minute"
 }

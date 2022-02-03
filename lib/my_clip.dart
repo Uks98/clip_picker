@@ -122,16 +122,16 @@ class _MyClipState extends State<MyClip> {
                   Icons.calendar_today_outlined,
                   color: Palette.textColor,
                 ),
-                label: "기록"),
+                label: "기록".tr()),
             BottomNavigationBarItem(
                 icon: Icon(Icons.padding, color: Palette.textColor1),
-                label: "전체보기"),
+                label: "전체보기".tr()),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.bar_chart,
                   color: Palette.textColor,
                 ),
-                label: "통계"),
+                label: "통계".tr()),
           ],
           onTap: (idx) {
             setState(() {
@@ -590,7 +590,7 @@ class _MyClipState extends State<MyClip> {
                                       getTooltipItems: (spots) {
                                 return [
                                   LineTooltipItem(
-                                      "${Utils.doubleToDateTime2(spots.first.x)}\n${spots.first.y}분".replaceAll("00:00:00.000",""),
+                                      "${Utils.doubleToDateTime2(spots.first.x)}\n${spots.first.y} 분".replaceAll("00:00:00.000",""),
                                       TextStyle(
                                           color: Colors.black, fontSize: 20))
                                 ];
@@ -625,7 +625,7 @@ class _MyClipState extends State<MyClip> {
                       height: 300,
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -645,19 +645,23 @@ class _MyClipState extends State<MyClip> {
                                 itemCount: studyType.length,
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                    child: Stack(
                                       children: [
-                                        Text("${studyType[index]}",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.grey[800])),
-                                        Text(
-                                            "${allPicks.where((element) => element.studyType == index).length}",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.grey[800])),
+                                        Container(
+                                          child: Text("${studyType[index]}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.grey[800])),
+                                          margin: EdgeInsets.only(left: 50),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 260),
+                                          child: Text(
+                                              "${allPicks.where((element) => element.studyType == index).length}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.grey[800])),
+                                        ),
                                       ],
                                     ),
                                   );
@@ -684,7 +688,7 @@ class _MyClipState extends State<MyClip> {
                       height: 150,
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     Column(
                       children: [
@@ -703,19 +707,23 @@ class _MyClipState extends State<MyClip> {
                                 itemCount: studyHard.length,
                                 itemBuilder: (context, idx) {
                                   return Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                    child: Stack(
                                       children: [
-                                        Text("${studyHard[idx]}",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey[800])),
-                                        Text(
-                                            "${allPicks.where((element) => element.hardStudy == idx).length}",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.grey[800])),
+                                        Container(
+                                          child: Text("${studyHard[idx]}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.grey[800])),
+                                          margin: EdgeInsets.only(left: 50),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 260),
+                                          child: Text(
+                                              "${allPicks.where((element) => element.hardStudy == idx).length}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.grey[800])),
+                                        ),
                                       ],
                                     ),
                                   );
@@ -732,9 +740,13 @@ class _MyClipState extends State<MyClip> {
                   Container(
                     child: Text("가장 최근 기록 ",style: TextStyle(color: Colors.white),).tr(),
                   ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Container(
                     child: Text("${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),).tr(),
                   ),
+                  SizedBox(height: 20,)
                 ],
               );
             }
