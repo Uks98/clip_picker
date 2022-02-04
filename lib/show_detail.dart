@@ -73,7 +73,7 @@ class ShowDetail extends StatelessWidget {
                         "무제",
                         style: TextStyle(
                             fontSize: 20, color: Palette.textColor1),
-                      ).tr():Text(
+                      ).tr() :Text(
                         picks.name,
                         style: TextStyle(
                             fontSize: 20, color: Palette.textColor1),
@@ -86,11 +86,11 @@ class ShowDetail extends StatelessWidget {
                   margin: EdgeInsets.only(left: 25,top: 15,right: 20),
                   child: Row(
                     children: [
-                      Text("공부 시간 · ", style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
+                      Text("공부 시간 ·".tr(), style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
                       Text("${Utils.makeTwoDigit(pick.studyTime ~/ 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
-                      Text("시간 ", style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
+                      Text("시간".tr(), style: TextStyle(color: Colors.white, fontSize: 17),),
                       Text("${Utils.makeTwoDigit(pick.studyTime % 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
-                      Text("분", style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
+                      Text("분".tr(), style: TextStyle(color: Colors.white, fontSize: 17),),
                     ],
                   ),
                 );

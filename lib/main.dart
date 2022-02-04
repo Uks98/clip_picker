@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl_standalone.dart';
 
 final supportedLocales = [
+  Locale('ko', 'KR'),
   Locale('en', 'US'),
 ];
 
@@ -22,9 +23,9 @@ void main() async{
   await findSystemLocale();
   await Firebase.initializeApp();
     initializeDateFormatting().then((_) => runApp(
-        EasyLocalization(child: MyApp(
-
-
+        EasyLocalization(
+          fallbackLocale: Locale('en'),
+          child: MyApp(
         ),supportedLocales: supportedLocales, path: "translations",)));
 
 }
@@ -39,9 +40,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: SplashScreenView(
         home: MyClip(),
-        duration: 4000,
+        duration: 3000,
         imageSize: 230,
-        text: "똑똑하게 기록하자",
+        text: "똑똑하게 기록하자.".tr(),
         textStyle: TextStyle(color: Palette.textColor1,fontSize: 16),
         imageSrc: "lib/assets/icons.png",
         backgroundColor: Palette.backgroundColor,

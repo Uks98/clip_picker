@@ -562,9 +562,9 @@ class StudyCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text("공부 시간 · ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                      Text("공부 시간 ·", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
                       Text("${Utils.makeTwoDigit(pick.studyTime ~/ 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
-                      Text("시간 ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                      Text("시간", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
                       Text("${Utils.makeTwoDigit(pick.studyTime % 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
                       Text("분", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
                     ],
@@ -714,7 +714,7 @@ class _GetAllStudyCardState extends State<GetAllStudyCard> {
                     ),
                     Row(
                       children: [
-                        Text("공부 시간 · ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
+                        Text("공부 시간 ·", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
                         Text("${Utils.makeTwoDigit(widget.pick.studyTime ~/ 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
                         Text("시간 ", style: TextStyle(color: Colors.white, fontSize: 16),).tr(),
                         Text("${Utils.makeTwoDigit(widget.pick.studyTime % 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),

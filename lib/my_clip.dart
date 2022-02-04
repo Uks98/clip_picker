@@ -1,6 +1,3 @@
-//import 'package:admob_flutter/admob_flutter.dart';
-import 'dart:math';
-
 import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/pick_class.dart';
 import 'package:clip_picker/data/utils.dart';
@@ -41,6 +38,7 @@ class _MyClipState extends State<MyClip> {
   List<Pick> events = [];
   int _d;
   DateTime date;
+  bool switchStatus = true;
 
   var s;
   var g;
@@ -49,6 +47,7 @@ class _MyClipState extends State<MyClip> {
   List addNum;
   int allTime;
   int x = 0;
+
   int findLatesTitle() {
     for(final t in allPicks){
       final l = t.date;
@@ -57,13 +56,6 @@ class _MyClipState extends State<MyClip> {
       final m = num.first;
       latestTime = Utils.numToDateTime2(m);
     }
-  }
-
-  int allTimeAdd() {
-    for(final y in allPicks) {
-      g = y.studyTime;
-    }
-    addNum = [g];
   }
 
 
@@ -165,7 +157,7 @@ class _MyClipState extends State<MyClip> {
                       context: context,
                       builder: (context) {
                         return Container(
-                          height: 100,
+                          height: 150,
                           child: Column(
                             children: [
                               TextButton(
@@ -201,7 +193,17 @@ class _MyClipState extends State<MyClip> {
                                 child: Text("설정",
                                     style: TextStyle(
                                         color: Palette.backgroundColor)).tr(),
-                              )
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                 setState(() {
+                                   switchStatus = false;
+                                 });
+                                },
+                                child: Text("달력 영어로 변경하기",
+                                    style: TextStyle(
+                                        color: Palette.backgroundColor)).tr(),
+                              ),
                             ],
                           ),
                         );
@@ -230,7 +232,7 @@ class _MyClipState extends State<MyClip> {
               getPicks();
               return TableCalendar(
                 events: _events,
-                locale: 'ko-KR',
+                locale: switchStatus == true ? "ko-KR": 'en-US',
                 calendarStyle:
                     CalendarStyle(weekdayStyle: TextStyle(color: Colors.white)),
                 builders: CalendarBuilders(
@@ -469,7 +471,7 @@ class _MyClipState extends State<MyClip> {
                                                       ],
                                                     )
                                                   ],
-                                                )
+                                                ),
                                               ],
                                             ),
                                           );
@@ -478,7 +480,7 @@ class _MyClipState extends State<MyClip> {
                                   child: Text("삭제하기",
                                       style:
                                           TextStyle(color: Colors.redAccent)).tr(),
-                                )
+                                ),
                               ],
                             ),
                           );

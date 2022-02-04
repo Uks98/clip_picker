@@ -1,6 +1,6 @@
 {
-  "공부 제목": "Study Title",
-  "공부 추가": "Study Add",
+  "공부 제목": "Study Titlesssss",
+  "공부 추가": "Study Adds",
   "나의 공부 기록": "My study record",
   "아직 작성한 기록이 없어요": "There is no record written yet",
   "+ 를 눌러 오늘의 공부를 기록하세요": "Press + to record today's study",
@@ -25,16 +25,14 @@
   "컴퓨터": "Computer",
   "기타": "etc",
 
-   "가볍게":"mild",
-   "적당히":"properly",
+  "가볍게":"mild",
+  "적당히":"properly",
   "보통":"normal",
-   "열심히": "hard",
+  "열심히": "hard",
 
-  "통계":"Statistics",
   "내가 작성한 기록":"My record ",
   "자라나는 새싹":"Growing sprouts",
   "공부 시간 그래프":"Study time graph",
-  "분":"minute",
   "공부 분석":"Study analysis",
   "가장 최근 기록 ":"The most recent record",
   "당신의 도전을 응원합니다.":"I support your challenge",
@@ -42,9 +40,9 @@
   "무제":"No title",
   "어떤 공부를 하셨나요?" : "What did you study?",
 
-  "공부 시간 · ": "StudyTime · ",
-  "시간 ": "hour ",
-  " 분 ": "minute",
+  "공부 시간 ·": "StudyTime ·",
+  "시간": "hour ",
+  "분": "minute",
 
   "삭제하기": "Delete",
   "삭제": "Delete",
@@ -66,5 +64,6 @@
   "기록" : "Record",
   "전체보기" : "View",
   "통계" : "Statistics",
-  "분" : "minute"
+  "Let's record it smartly.": "똑똑하게 기록하자!",
+  "달력 영어로 변경하기": "Change the calendar to English."
 }

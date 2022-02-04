@@ -1,3 +1,4 @@
+import 'package:clip_picker/copy_right/copy_right.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -133,7 +134,7 @@ class _SettingState extends State<Setting> {
           ListTile(
               trailing: Icon(Icons.arrow_drop_down),
               onTap: (){
-                //Get.to(Licence());
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CopyRight()));
               },
               title: Text(
                 '저작권',
