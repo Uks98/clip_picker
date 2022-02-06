@@ -1,6 +1,7 @@
 import 'package:clip_picker/data/list_box.dart';
 import 'package:clip_picker/data/pick_class.dart';
 import 'package:clip_picker/data/utils.dart';
+import 'package:clip_picker/funtion.dart';
 import 'package:clip_picker/setting.dart';
 import 'package:clip_picker/show_detail.dart';
 import 'package:clip_picker/stydyaddpage.dart';
@@ -10,9 +11,14 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'cards/get_all_studycard.dart';
+import 'cards/study_card.dart';
 import 'data/database.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'main.dart';
 
 class MyClip extends StatefulWidget {
   const MyClip({Key key}) : super(key: key);
@@ -22,6 +28,8 @@ class MyClip extends StatefulWidget {
 }
 
 class _MyClipState extends State<MyClip> {
+
+  Alarm alarm = Alarm();
   BannerAd banner;
   final addMobId = "ca-app-pub-4051456724877953/3768717446";
   FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -40,25 +48,19 @@ class _MyClipState extends State<MyClip> {
   DateTime date;
   bool switchStatus = true;
 
-  var s;
-  var g;
   var latestTime;
-  List num;
+  List latestNum;
   List addNum;
-  int allTime;
-  int x = 0;
 
   int findLatesTitle() {
     for(final t in allPicks){
       final l = t.date;
-      num = [l];
-      num.sort();
-      final m = num.first;
+      latestNum = [l];
+      latestNum.sort();
+      final m = latestNum.first;
       latestTime = Utils.numToDateTime2(m);
     }
   }
-
-
 
   void getHistories() async {
     _d = Utils.getFormatTime(dateTime);
@@ -84,12 +86,86 @@ class _MyClipState extends State<MyClip> {
     await DatabaseHelper.instance.delete(id);
   }
 
+ void _getAddStudyPage(){
+     Navigator.of(context)
+         .push(MaterialPageRoute(
+         builder: (ctx) => StudyAddPage(
+           pick: Pick(
+             date: Utils.getFormatTime(dateTime),
+             name: "",
+             memo: "",
+             time: 0110,
+             studyTime: 0,
+             studyType: 0,
+             hardStudy: 0,
+             image: "",
+             color: 0,
+           ),
+         )));
+     getHistories();
+ }
+
+ void _showAddBottomsheet(){
+   showModalBottomSheet(
+       context: context,
+       builder: (context) {
+         return Container(
+           height: 150,
+           child: Column(
+             children: [
+               TextButton(
+                   onPressed: _getAddStudyPage,
+                   child: Text(
+                     "공부 추가",
+                     style: TextStyle(
+                         color: Palette.backgroundColor),
+                   ).tr()),
+               TextButton(
+                 onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(
+                       builder: (BuildContext context) =>
+                           Setting()));
+                 },
+                 child: Text("설정",
+                     style: TextStyle(
+                         color: Palette.backgroundColor)).tr(),
+               ),
+               TextButton(
+                 onPressed: () {
+                   setState(() {
+                     switchStatus = false;
+                   });
+                 },
+                 child: Text("달력 영어로 변경하기",
+                     style: TextStyle(
+                         color: Palette.backgroundColor)).tr(),
+               ),
+             ],
+           ),
+         );
+       });
+ }
+
+
+
+  Widget getPage() {
+    if (currentIndex == 0) {
+      return getRecordStudy();
+    } else if (currentIndex == 1) {
+      return getAllHistories();
+    } else if (currentIndex == 2) {
+      return getAllStudyPicker();
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getHistories();
     getAllStudy();
+    alarm.initNotification();
+    alarm.setScheduling();
     banner = BannerAd(
       listener: AdListener(),
       size: AdSize.banner,
@@ -152,76 +228,11 @@ class _MyClipState extends State<MyClip> {
                   Icons.add,
                   color: Colors.white,
                 ),
-                onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Container(
-                          height: 150,
-                          child: Column(
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (ctx) => StudyAddPage(
-                                                  pick: Pick(
-                                                    date: Utils.getFormatTime(dateTime),
-                                                    name: "",
-                                                    memo: "",
-                                                    time: 0110,
-                                                    studyTime: 0,
-                                                    studyType: 0,
-                                                    hardStudy: 0,
-                                                    image: "",
-                                                    color: 0,
-                                                  ),
-                                                )));
-                                    getHistories();
-                                  },
-                                  child: Text(
-                                    "공부 추가",
-                                    style: TextStyle(
-                                        color: Palette.backgroundColor),
-                                  ).tr()),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Setting()));
-                                },
-                                child: Text("설정",
-                                    style: TextStyle(
-                                        color: Palette.backgroundColor)).tr(),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                 setState(() {
-                                   switchStatus = false;
-                                 });
-                                },
-                                child: Text("달력 영어로 변경하기",
-                                    style: TextStyle(
-                                        color: Palette.backgroundColor)).tr(),
-                              ),
-                            ],
-                          ),
-                        );
-                      });
-                },
+                onPressed:_showAddBottomsheet,
               )
             : Container());
   }
 
-  Widget getPage() {
-    if (currentIndex == 0) {
-      return getRecordStudy();
-    } else if (currentIndex == 1) {
-      return getAllHistories();
-    } else if (currentIndex == 2) {
-      return getAllStudyPicker();
-    }
-  }
 
   Widget getRecordStudy() {
     return Container(
@@ -346,7 +357,7 @@ class _MyClipState extends State<MyClip> {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, top: 20),
       child: Container(
-        height: 450,
+        height: 390,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             physics: ScrollPhysics(),
@@ -458,8 +469,7 @@ class _MyClipState extends State<MyClip> {
                                                                 .pop();
                                                           },
                                                           child: Text(
-                                                            '취소',
-                                                            style: TextStyle(
+                                                            '취소', style: TextStyle(
                                                                 fontSize: 14,
                                                                 color:
                                                                     Colors.blue,
@@ -619,8 +629,7 @@ class _MyClipState extends State<MyClip> {
               ).tr());
             } else if (idx == 5) {
               return Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                 child: Stack(
                   children: [
                     Container(
@@ -646,27 +655,28 @@ class _MyClipState extends State<MyClip> {
                                 },
                                 itemCount: studyType.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    child: Stack(
+                                  return
+                                     Stack(
                                       children: [
                                         Container(
                                           child: Text("${studyType[index]}",
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.grey[800])),
-                                          margin: EdgeInsets.only(left: 50),
+                                          margin: EdgeInsets.only(left: 30),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 260),
-                                          child: Text(
-                                              "${allPicks.where((element) => element.studyType == index).length}",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.grey[800])),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 260),
+                                          child: Container(
+                                            child: Text(
+                                                "${allPicks.where((element) => element.studyType == index).length}",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.grey[800])),
+                                          ),
                                         ),
                                       ],
-                                    ),
-                                  );
+                                    );
                                 })),
                       ],
                     )
@@ -682,8 +692,7 @@ class _MyClipState extends State<MyClip> {
               );
             } else if (idx == 7) {
               return Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
                 child: Stack(
                   children: [
                     Container(
@@ -716,10 +725,10 @@ class _MyClipState extends State<MyClip> {
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.grey[800])),
-                                          margin: EdgeInsets.only(left: 50),
+                                          margin: EdgeInsets.only(left: 30),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 260),
+                                        Padding(
+                                          padding:  EdgeInsets.only(left: 260.0),
                                           child: Text(
                                               "${allPicks.where((element) => element.hardStudy == idx).length}",
                                               style: TextStyle(
@@ -743,10 +752,10 @@ class _MyClipState extends State<MyClip> {
                     child: Text("가장 최근 기록 ",style: TextStyle(color: Colors.white),).tr(),
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 8,
                   ),
                   Container(
-                    child: Text("${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),).tr(),
+                    child: latestTime == null ? Text("아직 작성한 기록이 없어요",style: TextStyle(color: Colors.white,fontSize: 12)):Text("${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),).tr(),
                   ),
                   SizedBox(height: 20,)
                 ],

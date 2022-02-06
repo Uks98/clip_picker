@@ -1,11 +1,12 @@
 import 'package:clip_picker/copy_right/copy_right.dart';
+import 'package:clip_picker/funtion.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'data/database.dart';
-
+import 'package:timezone/timezone.dart' as tz;
 class Setting extends StatefulWidget {
   Setting({Key key}) : super(key: key);
 
@@ -14,8 +15,10 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  Alarm alarm =  Alarm();
   bool isSwitched = false;
   final dbHelper = DatabaseHelper.instance;
+  bool state = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +131,30 @@ class _SettingState extends State<Setting> {
                     fontWeight: FontWeight.bold
                 ),
               ).tr()),
+         // ListTile(
+         //     trailing:  CupertinoSwitch(
+         //       value:state,
+         //       onChanged: (value){
+         //         setState(() {
+         //           state = value;
+         //         });
+         //         if(state == false){
+         //           print("알람 켜짐");
+         //         }else{
+         //           alarm.setScheduling();
+         //           print("알람 켜짐");
+         //         }
+         //       },
+         //     ),
+         //     onTap: _sendEmail,
+         //     title: Text(
+         //       '알람',
+         //       style: TextStyle(
+         //           fontSize: 16,
+         //           fontFamily: 'gom_KR',
+         //           fontWeight: FontWeight.bold
+         //       ),
+         //     ).tr()),
           SizedBox(
             height: 10,
           ),

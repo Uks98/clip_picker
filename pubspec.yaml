@@ -46,6 +46,7 @@ dependencies:
   firebase_analytics: ^7.0.1
   google_mobile_ads: ^0.11.0+4
   easy_localization: ^2.3.3+1
+
   splash_screen_view: ^1.0.1
 dev_dependencies:
   flutter_test:

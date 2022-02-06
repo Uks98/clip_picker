@@ -86,7 +86,7 @@ class ShowDetail extends StatelessWidget {
                   margin: EdgeInsets.only(left: 25,top: 15,right: 20),
                   child: Row(
                     children: [
-                      Text("공부 시간 ·".tr(), style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
+                      Text("공부 시간 · ".tr(), style: TextStyle(color: Colors.white, fontSize: 17),).tr(),
                       Text("${Utils.makeTwoDigit(pick.studyTime ~/ 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
                       Text("시간".tr(), style: TextStyle(color: Colors.white, fontSize: 17),),
                       Text("${Utils.makeTwoDigit(pick.studyTime % 60)}", style: TextStyle(color: Colors.white, fontSize: 16),),
