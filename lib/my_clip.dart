@@ -18,6 +18,7 @@ import 'cards/study_card.dart';
 import 'data/database.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'data/toggle_button_class.dart';
 import 'main.dart';
 
 class MyClip extends StatefulWidget {
@@ -86,6 +87,8 @@ class _MyClipState extends State<MyClip> {
     await DatabaseHelper.instance.delete(id);
   }
 
+  Size size;
+
  void _getAddStudyPage(){
      Navigator.of(context)
          .push(MaterialPageRoute(
@@ -123,14 +126,18 @@ class _MyClipState extends State<MyClip> {
                TextButton(
                  onPressed: () {
                    Navigator.of(context).push(MaterialPageRoute(
-                       builder: (BuildContext context) =>
-                           Setting()));
+                       builder: (BuildContext context) => Setting()));
                  },
                  child: Text("설정",
                      style: TextStyle(
                          color: Palette.backgroundColor)).tr(),
                ),
                TextButton(
+                 onLongPress: (){
+                   setState(() {
+                     switchStatus = true;
+                   });
+                 },
                  onPressed: () {
                    setState(() {
                      switchStatus = false;
@@ -243,7 +250,7 @@ class _MyClipState extends State<MyClip> {
               getPicks();
               return TableCalendar(
                 events: _events,
-                locale: switchStatus == true ? "ko-KR": 'en-US',
+                locale: switchStatus == true ? "ko-KR":"en-US",
                 calendarStyle:
                     CalendarStyle(weekdayStyle: TextStyle(color: Colors.white)),
                 builders: CalendarBuilders(
@@ -437,13 +444,10 @@ class _MyClipState extends State<MyClip> {
                                                       children: [
                                                         TextButton(
                                                           onPressed: () {
-                                                            getDelete(
-                                                                picks[idx].id);
+                                                            getDelete(picks[idx].id);
                                                             getHistories();
                                                             setState(() {});
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
+                                                            Navigator.of(context).pop();
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
@@ -585,8 +589,8 @@ class _MyClipState extends State<MyClip> {
                               lineBarsData: [
                                   //각 항목에 대한 데이터가 들어가는 곳
                                   LineChartBarData(
-                                    isCurved:true,
-                                      barWidth: 3.3,
+                                    isCurved:false,
+                                      barWidth: 3,
                                       spots: spots,
                                       belowBarData: BarAreaData(
                                         show: true,
@@ -663,10 +667,10 @@ class _MyClipState extends State<MyClip> {
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.grey[800])),
-                                          margin: EdgeInsets.only(left: 30),
+                                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.063),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 260),
+                                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.63),
                                           child: Container(
                                             child: Text(
                                                 "${allPicks.where((element) => element.studyType == index).length}",
@@ -701,46 +705,41 @@ class _MyClipState extends State<MyClip> {
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                    Column(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: ListView.separated(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                separatorBuilder: (context, _index) {
-                                  return Divider(
-                                    thickness: 1,
-                                    indent: 0,
-                                    endIndent: 0,
-                                  );
-                                },
-                                itemCount: studyHard.length,
-                                itemBuilder: (context, idx) {
-                                  return Container(
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          child: Text("${studyHard[idx]}",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.grey[800])),
-                                          margin: EdgeInsets.only(left: 30),
-                                        ),
-                                        Padding(
-                                          padding:  EdgeInsets.only(left: 260.0),
-                                          child: Text(
-                                              "${allPicks.where((element) => element.hardStudy == idx).length}",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.grey[800])),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                })),
-                      ],
-                    )
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, _index) {
+                            return Divider(
+                              thickness: 1,
+                              indent: 0,
+                              endIndent: 0,
+                            );
+                          },
+                          itemCount: studyHard.length,
+                          itemBuilder: (context, idx) {
+                            return Stack(
+                                children: [
+                                  Container(
+                                    child: Text("${studyHard[idx]}",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey[800])),
+                                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.08),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                        "${allPicks.where((element) => element.hardStudy == idx).length}",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey[800]),),
+                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.63),
+                                  ),
+                                ],
+                              );
+                          }),
+                    ),
                   ],
                 ),
               );
@@ -755,9 +754,9 @@ class _MyClipState extends State<MyClip> {
                     height: 8,
                   ),
                   Container(
-                    child: latestTime == null ? Text("아직 작성한 기록이 없어요",style: TextStyle(color: Colors.white,fontSize: 12)):Text("${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),).tr(),
+                    child: latestTime == null ? Text("아직 작성한 기록이 없어요",style: TextStyle(color: Colors.white,fontSize: 12)):Text("${latestTime}".toString().replaceAll('00:00:00.000', ""),style: TextStyle(color: Colors.white),),
                   ),
-                  SizedBox(height: 20,)
+                  SizedBox(height: 20,),
                 ],
               );
             }

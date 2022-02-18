@@ -15,9 +15,10 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 final supportedLocales = [
-  Locale('ko', 'KR'),
-  Locale('en', 'US'),
+  Locale('ko','KR'),
+  Locale('en','US'),
 ];
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 void main() async{
@@ -28,7 +29,7 @@ void main() async{
   await Firebase.initializeApp();
     initializeDateFormatting().then((_) => runApp(
         EasyLocalization(
-          fallbackLocale: Locale('en'),
+          fallbackLocale: Locale('en','Us'),
           child: MyApp(
         ),supportedLocales: supportedLocales, path: "translations",)));
 
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     return MaterialApp(
+      builder: (context,child) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor:1.0 ), child: child),
       home: SplashScreenView(
         home: MyClip(),
         duration: 1000,

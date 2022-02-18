@@ -44,6 +44,13 @@ class _StudyAddPageState extends State<StudyAddPage> {
         request: AdRequest(),
     )..load();
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    titleController.dispose();
+    memoController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +77,7 @@ class _StudyAddPageState extends State<StudyAddPage> {
                    interstitialAd.show();
                   }
                   Navigator.of(context).pop();
+                  Navigator.of(context).maybePop();
                 },
                 child: Text("저장하기",style: TextStyle(color: Palette.textColor1),).tr())
           ],

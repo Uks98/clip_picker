@@ -4,6 +4,7 @@
   "나의 공부 기록": "My study record",
   "아직 작성한 기록이 없어요": "There is no record written yet",
   "+ 를 눌러 오늘의 공부를 기록하세요": "Press + to record today's study",
+  "알람": "Alarm",
 
   "공부 시간":"Study Time",
   " 분":" Minute",
@@ -40,7 +41,8 @@
   "무제":"No title",
   "어떤 공부를 하셨나요?" : "What did you study?",
 
-  "공부 시간 ·": "StudyTime ·",
+  "공부 시간 · ": "StudyTime · ",
+  "시간 ": "hour ",
   "시간": "hour ",
   "분": "minute",
 
@@ -64,7 +66,7 @@
   "기록" : "Record",
   "전체보기" : "View",
   "통계" : "Statistics",
-  "Let's record it smartly.": "똑똑하게 기록하자!",
+  "똑똑하게 기록하자.": "Let's record it smartly.",
   "달력 영어로 변경하기": "Change the calendar to English.",
   "오늘한 공부를 기록으로 남겨보는건 어떨까요?\uD83D\uDD25" : "Why don't we record what we did today!"
 }

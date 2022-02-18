@@ -1,12 +1,15 @@
 import 'package:clip_picker/copy_right/copy_right.dart';
+import 'package:clip_picker/data/toggle_button_class.dart';
 import 'package:clip_picker/funtion.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'data/database.dart';
 import 'package:timezone/timezone.dart' as tz;
+
 class Setting extends StatefulWidget {
   Setting({Key key}) : super(key: key);
 
@@ -15,10 +18,38 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-  Alarm alarm =  Alarm();
-  bool isSwitched = false;
+  Alarm alarm = Alarm();
   final dbHelper = DatabaseHelper.instance;
-  bool state = false;
+  Toggles toggles = Toggles();
+
+  Future<void> _toggleSwitch(bool value) async {
+    if (toggles.switchControl == false) {
+      setState(() {
+        toggles.saveSwitchState(value);
+        toggles.switchControl = true;
+        alarm.setScheduling();
+      });
+      print('ON');
+    } else {
+      setState(() {
+        toggles.saveSwitchState(value);
+        toggles.switchControl = false;
+      });
+      print('OFF');
+    }
+  }
+
+  getSwitchValues() async {
+    toggles.switchControl = await toggles.getSwitchState();
+    setState(() {});
+  }
+
+  @override
+  initState() {
+    super.initState();
+    getSwitchValues();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +57,7 @@ class _SettingState extends State<Setting> {
         leading: IconButton(
           onPressed: (){
             Navigator.of(context).pop();
-            Navigator.of(context).pop();
+            Navigator.of(context).maybePop();
           },
           icon: Icon(Icons.clear),
           color:Colors.grey[500],
@@ -131,30 +162,20 @@ class _SettingState extends State<Setting> {
                     fontWeight: FontWeight.bold
                 ),
               ).tr()),
-         // ListTile(
-         //     trailing:  CupertinoSwitch(
-         //       value:state,
-         //       onChanged: (value){
-         //         setState(() {
-         //           state = value;
-         //         });
-         //         if(state == false){
-         //           print("알람 켜짐");
-         //         }else{
-         //           alarm.setScheduling();
-         //           print("알람 켜짐");
-         //         }
-         //       },
-         //     ),
-         //     onTap: _sendEmail,
-         //     title: Text(
-         //       '알람',
-         //       style: TextStyle(
-         //           fontSize: 16,
-         //           fontFamily: 'gom_KR',
-         //           fontWeight: FontWeight.bold
-         //       ),
-         //     ).tr()),
+         ListTile(
+             trailing:  CupertinoSwitch(
+               value: toggles.switchControl,
+               onChanged: _toggleSwitch
+             ),
+             onTap: _sendEmail,
+             title: Text(
+               '알람',
+               style: TextStyle(
+                   fontSize: 16,
+                   fontFamily: 'gom_KR',
+                   fontWeight: FontWeight.bold
+               ),
+             ).tr()),
           SizedBox(
             height: 10,
           ),

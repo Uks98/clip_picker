@@ -23,6 +23,7 @@ class ShowDetail extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(onPressed: (){
           Navigator.of(context).pop();
+          Navigator.of(context).maybePop();
           InAppReview.instance.requestReview();
         }, icon: Icon(Icons.clear)),
         elevation: 0.0,

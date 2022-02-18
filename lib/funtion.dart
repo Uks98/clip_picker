@@ -7,6 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 final now = DateTime.now();
 
 class Alarm{
+
   Future<bool> initNotification() async {
     if (flutterLocalNotificationsPlugin == null) {
       flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -25,6 +26,7 @@ class Alarm{
     setScheduling();
     return true;
   }
+
   void setScheduling() {
     var android = AndroidNotificationDetails('study', 'studyapp', 'studyapp',
         importance: Importance.max, priority: Priority.max);
@@ -36,7 +38,7 @@ class Alarm{
         "Study Picker",
         "오늘한 공부를 기록으로 남겨보는건 어떨까요?🔥".tr(),
         tz.TZDateTime.from(
-            DateTime.now().add(Duration(seconds: 5)), tz.local),
+            DateTime(now.year, now.month, now.day, 21, 0), tz.local),
         details,
         uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
