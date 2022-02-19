@@ -29,7 +29,7 @@ class MyClip extends StatefulWidget {
 }
 
 class _MyClipState extends State<MyClip> {
-
+  Toggles toggle = Toggles();
   Alarm alarm = Alarm();
   BannerAd banner;
   final addMobId = "ca-app-pub-4051456724877953/3768717446";
@@ -62,7 +62,12 @@ class _MyClipState extends State<MyClip> {
       latestTime = Utils.numToDateTime2(m);
     }
   }
-
+  void getAlarmOn(){
+    if(toggle.switchControl == true){
+      alarm.initNotification();
+      alarm.setScheduling();
+    }
+  }
   void getHistories() async {
     _d = Utils.getFormatTime(dateTime);
     picks = await dbHelper.queryPickByDate(_d);
@@ -171,8 +176,7 @@ class _MyClipState extends State<MyClip> {
     super.initState();
     getHistories();
     getAllStudy();
-    alarm.initNotification();
-    alarm.setScheduling();
+    getAlarmOn();
     banner = BannerAd(
       listener: AdListener(),
       size: AdSize.banner,
@@ -670,7 +674,7 @@ class _MyClipState extends State<MyClip> {
                                           margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.063),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.63),
+                                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.65),
                                           child: Container(
                                             child: Text(
                                                 "${allPicks.where((element) => element.studyType == index).length}",
@@ -734,7 +738,7 @@ class _MyClipState extends State<MyClip> {
                                         style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.grey[800]),),
-                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.63),
+                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.65),
                                   ),
                                 ],
                               );

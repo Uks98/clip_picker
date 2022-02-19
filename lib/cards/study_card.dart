@@ -133,7 +133,7 @@ class StudyCard extends StatelessWidget {
                                 ),
                               )),
                           SizedBox(
-                            height: 15,
+                            height: 10,
                           ),
                         ],
                       ),

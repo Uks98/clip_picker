@@ -9,9 +9,7 @@ final now = DateTime.now();
 class Alarm{
 
   Future<bool> initNotification() async {
-    if (flutterLocalNotificationsPlugin == null) {
-      flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    }
+    flutterLocalNotificationsPlugin ??= FlutterLocalNotificationsPlugin();
     var initSettingAndroid = AndroidInitializationSettings("icons");
     var initiosSetting = IOSInitializationSettings(
         requestAlertPermission: true,
@@ -37,8 +35,7 @@ class Alarm{
         0,
         "Study Picker",
         "오늘한 공부를 기록으로 남겨보는건 어떨까요?🔥".tr(),
-        tz.TZDateTime.from(
-            DateTime(now.year, now.month, now.day, 21, 0), tz.local),
+        tz.TZDateTime.from(DateTime(now.year, now.month, now.day, 21, 0), tz.local),
         details,
         uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,

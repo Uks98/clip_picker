@@ -47,19 +47,24 @@ class ShowDetail extends StatelessWidget {
                     margin: EdgeInsets.only(top: 30),
                     decoration: BoxDecoration(
                         color: Palette.floatingColor,
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     width: 350,
                     height: 350,
-                  ):Container(
-                    margin: EdgeInsets.all(20),
-                    width: MediaQuery.of(context).size.width - 10,
-                    height: 350,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: AssetThumb(
-                        asset: Asset(picks.image, "noimg.png", 0, 0),
-                        width: 350,
-                        height: 350,
+                  ):InkWell(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ImageDetail(pickImage: picks)));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      width: MediaQuery.of(context).size.width - 10,
+                      height: 350,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: AssetThumb(
+                          asset: Asset(picks.image, "noimg.png", 300, 300),
+                          width: 350,
+                          height: 350,
+                        ),
                       ),
                     ),
                   ),
@@ -96,7 +101,7 @@ class ShowDetail extends StatelessWidget {
                   ),
                 );
               }else if(index == 4){
-                return Container(
+                return picks.memo.isEmpty ? Container():Container(
                   margin: EdgeInsets.only(left: 25,top: 15,right: 20),
                   child: Text(picks.memo,
                     style: TextStyle(color: Colors.white, fontSize: 18),
@@ -153,3 +158,35 @@ class ShowDetail extends StatelessWidget {
     );
   }
 }
+
+class ImageDetail extends StatelessWidget {
+  Pick pickImage;
+   ImageDetail({Key key,this.pickImage}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Palette.backgroundColor,
+        leading: CloseButton(),
+      ),
+      backgroundColor: Palette.backgroundColor,
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(25),
+             child: AssetThumb(
+               asset: Asset(pickImage.image, "noimg.png", 400, 400),
+               width: 400,
+               height: 400,
+             ),
+          ),
+        ),
+      )
+    );
+  }
+}
+

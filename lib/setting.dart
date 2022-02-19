@@ -5,7 +5,6 @@ import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'data/database.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -19,6 +18,7 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   Alarm alarm = Alarm();
+
   final dbHelper = DatabaseHelper.instance;
   Toggles toggles = Toggles();
 
@@ -54,12 +54,11 @@ class _SettingState extends State<Setting> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
+        leading: CloseButton(
           onPressed: (){
             Navigator.of(context).pop();
             Navigator.of(context).maybePop();
           },
-          icon: Icon(Icons.clear),
           color:Colors.grey[500],
         ),
         elevation: 0,
@@ -176,9 +175,7 @@ class _SettingState extends State<Setting> {
                    fontWeight: FontWeight.bold
                ),
              ).tr()),
-          SizedBox(
-            height: 10,
-          ),
+
           ListTile(
               trailing: Icon(Icons.arrow_drop_down),
               onTap: (){
@@ -203,6 +200,9 @@ class _SettingState extends State<Setting> {
                     fontWeight: FontWeight.bold
                 ),
               ).tr()),
+          SizedBox(
+            height: 10,
+          ),
           Padding(
             padding: EdgeInsets.only(
               left:20,
@@ -216,21 +216,7 @@ class _SettingState extends State<Setting> {
               ),
             ).tr(),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          ListTile(
-              trailing: Icon(Icons.arrow_drop_down),
-              onTap: () {
-                InAppReview.instance.requestReview();},
-              title: Text(
-                '개발자 칭찬하기',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'gom_KR',
-                ),
-              ).tr()),
+
           SizedBox(
             height: 10,
           ),

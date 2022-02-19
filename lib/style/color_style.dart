@@ -19,7 +19,7 @@ class Palette{
   static const gradientColor = Color(0xff93e1d8);
 
 
-  static const listPick = Color(0xffe6ccb2);
+  static const listPick = Color(0xff8e9aaf);
   static const listPick1 = Color(0xffe9c46a);
   static const listPick2 = Color(0xff4361ee);
   static const listPick3 = Color(0xffccd5ae);

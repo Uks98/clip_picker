@@ -89,7 +89,7 @@ flutter:
   fonts:
      - family: godo
        fonts:
-         - asset: lib/assets/GodoM.otf
+         - asset: lib/assets/SCDream5.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

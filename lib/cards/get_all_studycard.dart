@@ -162,7 +162,7 @@ class GetAllStudyCard extends StatelessWidget {
                                 "${Utils.numToDateTime2(pick.date)}".replaceAll(
                                     '00:00:00.000', ""),
                                 style: TextStyle(
-                                    fontSize: 16, color: Colors.grey[400]),
+                                    fontSize: 16, color: Colors.grey[200]),
                               ),)
                           ],
                         ),
