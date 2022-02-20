@@ -20,7 +20,10 @@ class StudyAddPage extends StatefulWidget {
 
 class _StudyAddPageState extends State<StudyAddPage> {
   DateTime dateTime = DateTime.now();
-  final getRewordId = "ca-app-pub-4051456724877953/9282938009";
+  //전면 광고 id
+  //전면 테스트 아이디 ca-app-pub-3940256099942544/1033173712
+  //전면 실제 아이디 ca-app-pub-2442162436672522/5575700662
+  final getRewordId = "ca-app-pub-2442162436672522/5575700662";
   InterstitialAd interstitialAd;
   Pick get pick => widget.pick;
   TextEditingController titleController = TextEditingController();

@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Study Picker',
       theme: ThemeData(
-        fontFamily: "godo",
+        fontFamily: "dream",
       ),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics)

@@ -4,6 +4,7 @@ import 'package:clip_picker/funtion.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'data/database.dart';
@@ -200,9 +201,17 @@ class _SettingState extends State<Setting> {
                     fontWeight: FontWeight.bold
                 ),
               ).tr()),
-          SizedBox(
-            height: 10,
-          ),
+          ListTile(
+              trailing: Icon(Icons.arrow_drop_down),
+              onTap: share,
+              title: Text(
+                '공유하기',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'gom_KR',
+                    fontWeight: FontWeight.bold
+                ),
+              ).tr()),
           Padding(
             padding: EdgeInsets.only(
               left:20,
@@ -216,9 +225,8 @@ class _SettingState extends State<Setting> {
               ),
             ).tr(),
           ),
-
           SizedBox(
-            height: 10,
+            height: 5,
           ),
           ListTile(
               trailing: Icon(Icons.arrow_drop_down),
@@ -283,5 +291,13 @@ class _SettingState extends State<Setting> {
       }),
     );
     launch(emailLaunchUri.toString());
+  }
+
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Study Picker Share',
+        linkUrl: 'https://play.google.com/store/apps/details?id=com.young.clip_picker',
+        chooserTitle: 'StudyPicker'
+    );
   }
 }

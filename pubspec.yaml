@@ -48,6 +48,7 @@ dependencies:
   easy_localization: ^2.3.3+1
   shared_preferences: ^0.5.12+4
   splash_screen_view: ^1.0.1
+  flutter_share: ^1.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -87,7 +88,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: godo
+     - family: dream
        fonts:
          - asset: lib/assets/SCDream5.otf
   #       - asset: fonts/Schyler-Italic.ttf

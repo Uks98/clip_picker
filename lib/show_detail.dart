@@ -61,7 +61,7 @@ class ShowDetail extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: AssetThumb(
-                          asset: Asset(picks.image, "noimg.png", 300, 300),
+                          asset: Asset(picks.image, "pickImage", 0, 0),
                           width: 350,
                           height: 350,
                         ),
@@ -176,8 +176,9 @@ class ImageDetail extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.height * 0.7,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(25),
+          child: InteractiveViewer(
+            boundaryMargin: EdgeInsets.zero,
+            constrained: false,
              child: AssetThumb(
                asset: Asset(pickImage.image, "noimg.png", 400, 400),
                width: 400,

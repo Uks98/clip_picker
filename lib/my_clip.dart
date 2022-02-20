@@ -32,7 +32,9 @@ class _MyClipState extends State<MyClip> {
   Toggles toggle = Toggles();
   Alarm alarm = Alarm();
   BannerAd banner;
-  final addMobId = "ca-app-pub-4051456724877953/3768717446";
+  //배너 테스트 ca-app-pub-3940256099942544/6300978111
+  //배너 실제 ca-app-pub-2442162436672522/8586035059
+  final addMobId = "ca-app-pub-2442162436672522/8586035059";
   FirebaseAnalytics analytics = FirebaseAnalytics();
 
   final dbHelper = DatabaseHelper.instance;
@@ -56,12 +58,13 @@ class _MyClipState extends State<MyClip> {
   int findLatesTitle() {
     for(final t in allPicks){
       final l = t.date;
-      latestNum = [l];
-      latestNum.sort();
+      latestNum.add(l);
+      latestNum..sort();
       final m = latestNum.first;
       latestTime = Utils.numToDateTime2(m);
     }
   }
+  
   void getAlarmOn(){
     if(toggle.switchControl == true){
       alarm.initNotification();
@@ -620,9 +623,8 @@ class _MyClipState extends State<MyClip> {
                                       showTitles: false,
                                       //하단 아래에 날짜표시
                                       getTitles: (value) {
-                                        DateTime date = Utils.stringToDateTime(
-                                            value.toInt().toString());
-                                        return "${date.day}일";
+                                        DateTime date = Utils.stringToDateTime(value.toInt().toString());
+                                        return "${date.day}";
                                       }),
                                   leftTitles: SideTitles(showTitles: false)),),),
                     )
